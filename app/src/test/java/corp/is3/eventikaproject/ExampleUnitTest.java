@@ -1,4 +1,4 @@
-package is3corp.eventika;
+package corp.is3.eventikaproject;
 
 import org.junit.Test;
 
