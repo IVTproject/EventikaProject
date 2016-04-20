@@ -1,6 +1,5 @@
 package corp.is3.eventikaproject;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -8,16 +7,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
-import java.security.acl.Group;
-
+import corp.is3.eventikaproject.customview.CustomMenu;
+import corp.is3.eventikaproject.customview.ItemMenuCustom;
 import corp.is3.eventikaproject.listeners.ItemSelectListener;
 import corp.is3.eventikaproject.ui.ProfileMenu;
 
@@ -25,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ProfileMenu profileMenu;
+    private CustomMenu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +34,9 @@ public class MainActivity extends AppCompatActivity {
         drawer.setDrawerListener(getDrawerListener());
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new ItemSelectListener(this));
 
-
-        LinearLayout layout = (LinearLayout) findViewById(R.id.content_menu);
-        ItemMenuCustom itemMenuCustom = new ItemMenuCustom(this);
-        itemMenuCustom.setIcon(R.drawable.ic_event_board_24dp);
-        itemMenuCustom.setTitle(R.string.event_board);
-        layout.addView(itemMenuCustom);
+        menu = new CustomMenu(this);
+        navigationView.addView(menu);
     }
 
     @Override
@@ -68,11 +58,6 @@ public class MainActivity extends AppCompatActivity {
         return new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                if(profileMenu == null) {
-                    profileMenu = new ProfileMenu(MainActivity.this);
-                    profileMenu.setProfileName(new String[]{"Исхаков", "Ильнур"});
-                    profileMenu.setAvatar(R.drawable.avatar);
-                }
             }
 
             @Override

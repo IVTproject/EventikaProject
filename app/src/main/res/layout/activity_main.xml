@@ -20,15 +20,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="false">
 
-        <LinearLayout
-            android:id="@+id/content_menu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <include layout="@layout/nav_header_main" />
-
-        </LinearLayout>
 
     </android.support.design.widget.NavigationView>
 

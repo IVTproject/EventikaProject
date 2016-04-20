@@ -1,4 +1,4 @@
-package corp.is3.eventikaproject;
+package corp.is3.eventikaproject.customview;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import corp.is3.eventikaproject.R;
 
 /**
  * Created by Дмитрий on 20.04.2016.
@@ -100,6 +102,6 @@ public class ItemMenuCustom extends LinearLayout implements View.OnTouchListener
         setLayoutParams(params);
         padding_medium = (int) getResources().getDimension(R.dimen.padding_medium);
         padding_high = (int) getResources().getDimension(R.dimen.padding_high);
-        setPadding(padding_medium, padding_high, padding_high, padding_medium);
+        setPadding(padding_medium, padding_medium, padding_medium, padding_medium);
     }
 }
