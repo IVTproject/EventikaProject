@@ -1,8 +1,6 @@
 package corp.is3.eventikaproject.ui;
 
-import android.app.Activity;
 import android.graphics.BitmapFactory;
-import android.text.Layout;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,15 +17,15 @@ public class ProfileMenu {
     private final CircleImageView avatar;
     private final TextView nameProfile;
 
-    private int padding_small;
+    private int paddingSmall;
 
     public ProfileMenu(View activity) {
         this.activity = activity;
-        padding_small = (int) activity.getResources().getDimension(R.dimen.padding_small);
+        paddingSmall = (int) activity.getResources().getDimension(R.dimen.padding_small);
         avatar = (CircleImageView) activity.findViewById(R.id.avatar_menu);
         nameProfile = (TextView) activity.findViewById(R.id.name_profile);
         LinearLayout linearLayout = (LinearLayout) activity.findViewById(R.id.profile);
-        linearLayout.setPadding(padding_small, padding_small, padding_small, padding_small);
+        linearLayout.setPadding(paddingSmall, paddingSmall, paddingSmall, paddingSmall);
     }
 
     public boolean setAvatar(int resource) {

@@ -3,53 +3,88 @@ package corp.is3.eventikaproject.customview;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.text.Layout;
-import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import corp.is3.eventikaproject.R;
+import corp.is3.eventikaproject.listeners.OnTouchClickListener;
 
 /**
  * Created by Дмитрий on 20.04.2016.
  */
 public class LastEventVIew extends RelativeLayout {
-    public LastEventVIew(Context context) {
+
+    private Drawable background;
+    private View shadow;
+    private Runnable action;
+    private String name;
+    private String date;
+    private float powerShadow = 0.4f;
+    private float textSize = getResources().getDimension(R.dimen.last_event_text_size);
+    private int paddingMedium = (int) getResources().getDimension(R.dimen.padding_medium);
+    private int paddingSmall = (int) getResources().getDimension(R.dimen.padding_small);
+
+    public LastEventVIew(Context context, Drawable background, String name, String date) {
         super(context);
+        this.background = background;
+        this.name = name;
+        this.date = date;
         init(context);
     }
 
-    public LastEventVIew(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public LastEventVIew(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
     public void init(Context context) {
+        setOnTouchListener(createListener());
+        setPadding(0, 0, 0, paddingSmall);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 128);
         setLayoutParams(params);
         View image = new View(context);
-        image.setBackgroundResource(R.drawable.menu_background);
+        image.setBackground(background);
         image.setLayoutParams(params);
 
-        View v = new View(context);
-        v.setBackgroundColor(Color.BLACK);
-        v.setAlpha(0.4f);
-        v.setLayoutParams(params);
+        shadow = new View(context);
+        shadow.setBackgroundColor(Color.BLACK);
+        shadow.setAlpha(powerShadow);
+        shadow.setLayoutParams(params);
 
-        TextView t = new TextView(context);
-        t.setTextColor(Color.WHITE);
-        t.setText("Hello world");
-        t.setLayoutParams(params);
+        TextView nameView = new TextView(context);
+        nameView.setPadding(paddingMedium, paddingSmall, 0, 0);
+        nameView.setTextColor(Color.WHITE);
+        nameView.setText(name);
+        nameView.setTextSize(textSize);
+        nameView.setLayoutParams(params);
+
+        TextView dateView = new TextView(context);
+        dateView.setPadding(paddingMedium * 2, (int) (paddingSmall * 2 + textSize), 0, 0);
+        dateView.setTextColor(Color.WHITE);
+        dateView.setText(date);
+        dateView.setLayoutParams(params);
 
         addView(image);
-        addView(v);
-        addView(t);
+        addView(shadow);
+        addView(nameView);
+        addView(dateView);
+    }
+
+    public void setAction(Runnable action) {
+        this.action = action;
+        setOnTouchListener(createListener());
+    }
+
+    private OnTouchClickListener createListener() {
+        return new OnTouchClickListener(action) {
+            @Override
+            public void select() {
+                super.select();
+                shadow.setAlpha(shadow.getAlpha() - 0.2f);
+            }
+
+            @Override
+            public void deSelect() {
+                super.deSelect();
+                shadow.setAlpha(powerShadow);
+            }
+        };
     }
 }
