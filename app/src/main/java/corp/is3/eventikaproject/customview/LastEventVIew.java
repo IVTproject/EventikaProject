@@ -31,7 +31,12 @@ public class LastEventVIew extends RelativeLayout {
         init(context);
     }
 
-    public void init(Context context) {
+    public void setAction(Runnable action) {
+        this.action = action;
+        setOnTouchListener(createListener());
+    }
+
+    private void init(Context context) {
         setOnTouchListener(createListener());
         setPadding(0, 0, 0, paddingSmall);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 128);
@@ -62,11 +67,6 @@ public class LastEventVIew extends RelativeLayout {
         addView(shadow);
         addView(nameView);
         addView(dateView);
-    }
-
-    public void setAction(Runnable action) {
-        this.action = action;
-        setOnTouchListener(createListener());
     }
 
     private OnTouchClickListener createListener() {

@@ -1,8 +1,12 @@
 package corp.is3.eventikaproject.listeners;
 
 import android.graphics.Color;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Дмитрий on 21.04.2016.
@@ -10,6 +14,8 @@ import android.view.View;
 public class OnTouchClickListener implements View.OnTouchListener {
 
     private Runnable runnable;
+    private Handler handler;
+    private Timer timer;
     private Float xDown = null;
     private Float yDown = null;
     private boolean isClicked = false;
@@ -18,13 +24,17 @@ public class OnTouchClickListener implements View.OnTouchListener {
         xDown = 0f;
         yDown = 0f;
         this.runnable = runnable;
+        this.handler = new Handler();
+        this.timer = new Timer();
     }
 
     public void select() {
-        isClicked = true;
+
     }
 
     public void deSelect() {
+        timer.cancel();
+        timer = new Timer();
         isClicked = false;
     }
 
@@ -34,11 +44,10 @@ public class OnTouchClickListener implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 xDown = event.getX();
                 yDown = event.getY();
-                select();
+                action_up();
                 break;
             case MotionEvent.ACTION_UP:
                 action();
-                deSelect();
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (isDistantion(event.getX(), event.getY(), xDown, yDown)) {
@@ -53,12 +62,47 @@ public class OnTouchClickListener implements View.OnTouchListener {
         return true;
     }
 
+    private void action_up() {
+        isClicked = true;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        select();
+                    }
+                });
+            }
+        }, 100);
+    }
+
+    private void action_down() {
+        isClicked = true;
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        deSelect();
+                    }
+                });
+            }
+        }, 500);
+    }
+
     private void action() {
-        if(runnable != null && isClicked)
+        if (runnable != null && isClicked) {
+            timer.cancel();
+            timer = new Timer();
+            select();
+            action_down();
             runnable.run();
+        }
     }
 
     private boolean isDistantion(float x1, float y1, float x2, float y2) {
-        return (float) Math.abs(Math.pow(Math.abs(x1 - x2), 2) - Math.pow(Math.abs(y1 - y2), 2)) > 30;
+        return (float) Math.abs(Math.pow(Math.abs(x1 - x2), 2) - Math.pow(Math.abs(y1 - y2), 2)) > 50;
     }
 }

@@ -1,6 +1,8 @@
 package corp.is3.eventikaproject.customview;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.GravityCompat;
@@ -37,7 +39,7 @@ public class CustomMenu extends LinearLayout {
     private final int[] TITLES = new int[]{R.string.event_board, R.string.favorites,
             R.string.group_add, R.string.notifications};
 
-    private final Context CONTEXT;
+    private final Activity ACTIVITY;
 
     private CircularImageView avatar;
     private TextView nameProfile;
@@ -47,16 +49,16 @@ public class CustomMenu extends LinearLayout {
     private int paddingSmall = (int) getResources().getDimension(R.dimen.padding_small);
     private int paddingMedium = (int) getResources().getDimension(R.dimen.padding_medium);
 
-    public CustomMenu(Context context, DrawerLayout drawer, ContentManager contentManager) {
+    public CustomMenu(Activity context, DrawerLayout drawer, ContentManager contentManager) {
         super(context);
         this.contentManager = contentManager;
-        this.CONTEXT = context;
+        this.ACTIVITY = context;
         this.drawer = drawer;
         init();
     }
 
     public void visitedEvent(EventInfo eventInfo) {
-        LastEventVIew eventVIew = new LastEventVIew(CONTEXT, eventInfo);
+        LastEventVIew eventVIew = new LastEventVIew(ACTIVITY, eventInfo);
         if (lastEvents.getChildCount() < COUNT_LAST_EVENT) {
             lastEvents.addView(eventVIew);
         } else {
@@ -66,15 +68,36 @@ public class CustomMenu extends LinearLayout {
         eventVIew.setAction(actionClickLastEvent(eventInfo.id));
     }
 
+    public boolean setAvatar(Drawable image) {
+        if(avatar != null) {
+            avatar.setImageDrawable(image);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setProfileName(String[] name) {
+        if(name != null) {
+            String result = "";
+            for(String part : name)
+                result += part + " ";
+            if(nameProfile != null) {
+                nameProfile.setText(result);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void init() {
-        LinearLayout linearLayout = new LinearLayout(CONTEXT);
-        ScrollView scroll = new ScrollView(CONTEXT);
-        lastEvents = new LinearLayout(CONTEXT);
+        LinearLayout linearLayout = new LinearLayout(ACTIVITY);
+        ScrollView scroll = new ScrollView(ACTIVITY);
+        lastEvents = new LinearLayout(ACTIVITY);
         setParams();
         linearLayout.addView(initHeader());
         linearLayout.setOrientation(VERTICAL);
         for (int i = 0; i < Math.min(ICONS.length, TITLES.length); i++) {
-            ItemMenuCustom itemMenuCustom = new ItemMenuCustom(CONTEXT, i);
+            ItemMenuCustom itemMenuCustom = new ItemMenuCustom(ACTIVITY, i);
             itemMenuCustom.setIcon(ICONS[i]);
             itemMenuCustom.setTitle(TITLES[i]);
             itemMenuCustom.setAction(actionClickItemMenu(i));
@@ -88,14 +111,14 @@ public class CustomMenu extends LinearLayout {
     }
 
     private View nextBlock(String text) {
-        LinearLayout nextBlock = new LinearLayout(CONTEXT);
+        LinearLayout nextBlock = new LinearLayout(ACTIVITY);
         nextBlock.setOrientation(VERTICAL);
         nextBlock.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        ImageView line = new ImageView(CONTEXT);
+        ImageView line = new ImageView(ACTIVITY);
         line.setPadding(0, paddingSmall, 0, paddingSmall);
         line.setBackgroundResource(R.drawable.line);
 
-        TextView label = new TextView(CONTEXT);
+        TextView label = new TextView(ACTIVITY);
         label.setPadding(paddingMedium, paddingSmall, 0, paddingMedium);
         label.setText(text);
         label.setTextColor(Color.GRAY);
@@ -120,7 +143,7 @@ public class CustomMenu extends LinearLayout {
 
     private LinearLayout initHeader() {
 
-        LinearLayout header = (LinearLayout) LinearLayout.inflate(CONTEXT, HEADER, null);
+        LinearLayout header = (LinearLayout) LinearLayout.inflate(ACTIVITY, HEADER, null);
         LayoutParams paramsH = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                 HEIGHT_HEADER);
         header.setLayoutParams(paramsH);
@@ -128,6 +151,15 @@ public class CustomMenu extends LinearLayout {
 
         avatar = (CircularImageView) header.findViewById(R.id.avatar_menu);
         nameProfile = (TextView) header.findViewById(R.id.name_profile);
+        avatar.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                ACTIVITY.startActivityForResult(photoPickerIntent, 1);
+            }
+        });
 
         LinearLayout linearLayout = (LinearLayout) header.findViewById(R.id.profile);
         linearLayout.setPadding(paddingSmall, paddingSmall, paddingSmall, paddingSmall);
@@ -156,26 +188,5 @@ public class CustomMenu extends LinearLayout {
                 drawer.closeDrawer(GravityCompat.START);
             }
         };
-    }
-
-    private boolean setAvatar(Drawable image) {
-        if(avatar != null) {
-            avatar.setImageDrawable(image);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean setProfileName(String[] name) {
-        if(name != null) {
-            String result = "";
-            for(String part : name)
-                result += part + " ";
-            if(nameProfile != null) {
-                nameProfile.setText(result);
-                return true;
-            }
-        }
-        return false;
     }
 }
