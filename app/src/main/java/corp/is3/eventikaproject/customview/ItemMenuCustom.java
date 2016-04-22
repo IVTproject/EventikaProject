@@ -2,9 +2,6 @@ package corp.is3.eventikaproject.customview;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;

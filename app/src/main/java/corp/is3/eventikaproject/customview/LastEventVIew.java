@@ -10,27 +10,24 @@ import android.widget.TextView;
 
 import corp.is3.eventikaproject.R;
 import corp.is3.eventikaproject.listeners.OnTouchClickListener;
+import corp.is3.eventikaproject.structures.EventInfo;
 
 /**
  * Created by Дмитрий on 20.04.2016.
  */
 public class LastEventVIew extends RelativeLayout {
 
-    private Drawable background;
     private View shadow;
     private Runnable action;
-    private String name;
-    private String date;
+    private EventInfo eventInfo;
     private float powerShadow = 0.4f;
     private float textSize = getResources().getDimension(R.dimen.last_event_text_size);
     private int paddingMedium = (int) getResources().getDimension(R.dimen.padding_medium);
     private int paddingSmall = (int) getResources().getDimension(R.dimen.padding_small);
 
-    public LastEventVIew(Context context, Drawable background, String name, String date) {
+    public LastEventVIew(Context context, EventInfo eventInfo) {
         super(context);
-        this.background = background;
-        this.name = name;
-        this.date = date;
+        this.eventInfo = eventInfo;
         init(context);
     }
 
@@ -40,7 +37,7 @@ public class LastEventVIew extends RelativeLayout {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 128);
         setLayoutParams(params);
         View image = new View(context);
-        image.setBackground(background);
+        image.setBackground(eventInfo.image);
         image.setLayoutParams(params);
 
         shadow = new View(context);
@@ -51,14 +48,14 @@ public class LastEventVIew extends RelativeLayout {
         TextView nameView = new TextView(context);
         nameView.setPadding(paddingMedium, paddingSmall, 0, 0);
         nameView.setTextColor(Color.WHITE);
-        nameView.setText(name);
+        nameView.setText(eventInfo.name);
         nameView.setTextSize(textSize);
         nameView.setLayoutParams(params);
 
         TextView dateView = new TextView(context);
         dateView.setPadding(paddingMedium * 2, (int) (paddingSmall * 2 + textSize), 0, 0);
         dateView.setTextColor(Color.WHITE);
-        dateView.setText(date);
+        dateView.setText(eventInfo.beginDate + " - " + eventInfo.endDate);
         dateView.setLayoutParams(params);
 
         addView(image);

@@ -11,4 +11,8 @@
     <string name="notifications">Уведомления</string>
     <string name="lasts">Последние</string>
 
+    <string name="block_event_param_one">Адресс:</string>
+    <string name="block_event_param_two">Дата начала:</string>
+    <string name="block_event_param_three">Дата конца:</string>
+
 </resources>
