@@ -2,9 +2,7 @@ package corp.is3.eventikaproject.structures;
 
 import android.graphics.drawable.Drawable;
 
-/**
- * Created by Дмитрий on 21.04.2016.
- */
+/* Информация о одном мероприятии*/
 public class EventInfo {
 
     public Drawable image;

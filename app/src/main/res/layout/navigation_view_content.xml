@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:attr="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_header_height"
+                android:background="@drawable/menu_background"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+                <LinearLayout
+                    android:id="@+id/profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top"
+                    android:orientation="vertical">
+
+                    <com.github.siyamed.shapeimageview.CircularImageView
+                        android:id="@+id/avatar_menu"
+                        android:layout_width="@dimen/avatar_size"
+                        android:layout_height="@dimen/avatar_size" />
+
+                    <TextView
+                        android:id="@+id/name_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <corp.is3.eventikaproject.customview.ItemMenuCustom
+                android:id="@+id/im_event_board"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itmIcon="@drawable/ic_event_board_24dp"
+                app:itmText="@string/event_board" />
+
+            <corp.is3.eventikaproject.customview.ItemMenuCustom
+                android:id="@+id/im_favorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itmIcon="@drawable/ic_favorites_24dp"
+                app:itmText="@string/favorites" />
+
+            <corp.is3.eventikaproject.customview.ItemMenuCustom
+                android:id="@+id/im_group_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itmIcon="@drawable/ic_group_add_24dp"
+                app:itmText="@string/group_add" />
+
+            <corp.is3.eventikaproject.customview.ItemMenuCustom
+                android:id="@+id/im_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itmIcon="@drawable/ic_notifications_24dp"
+                app:itmText="@string/notifications" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@drawable/line" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_high"
+                android:layout_marginTop="@dimen/padding_small"
+                android:text="@string/lasts"
+                android:textColor="#bababa"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:id="@+id/container_last_event"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -42,6 +42,10 @@
     </declare-styleable>
 
 
+    <declare-styleable name="ItemMenuCustom">
+        <attr name="itmText" format="string|reference"></attr>
+        <attr name="itmIcon" format="integer|reference"></attr>
+    </declare-styleable>
 
 
 

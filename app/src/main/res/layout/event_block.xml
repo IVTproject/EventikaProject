@@ -24,7 +24,7 @@
                 android:layout_height="120dp">
 
                 <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
-                    app:siShape="@drawable/shape_rounded_rectangle"
+                    app:siShape="@drawable/shape_rectangle_image_card_event"
                     app:siSquare="false"
                     android:id="@+id/image_event_card"
                     android:layout_width="match_parent"

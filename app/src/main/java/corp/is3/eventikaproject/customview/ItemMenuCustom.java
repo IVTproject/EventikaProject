@@ -1,20 +1,20 @@
 package corp.is3.eventikaproject.customview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import corp.is3.eventikaproject.R;
-import corp.is3.eventikaproject.listeners.OnTouchClickListener;
+import corp.is3.eventikaproject.listeners.OnTouchClickListenerBase;
 
-/**
- * Created by Дмитрий on 20.04.2016.
- */
+/* Пункт меню*/
 public class ItemMenuCustom extends LinearLayout {
-
-    public final int ID;
 
     private int padding_medium;
     private int padding_high;
@@ -24,28 +24,49 @@ public class ItemMenuCustom extends LinearLayout {
     private ImageView icon;
     private TextView title;
 
-    public ItemMenuCustom(Context context, int id) {
+    public ItemMenuCustom(Context context) {
         super(context);
         this.context = context;
-        this.ID = id;
         init();
     }
 
-    public void setAction(Runnable action) {
-        this.action = action;
-        this.setOnTouchListener(createListener());
+    public ItemMenuCustom(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
+        init();
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ItemMenuCustom);
+
+        setTitle(typedArray.getString(R.styleable.ItemMenuCustom_itmText));
+        setIcon(typedArray.getDrawable(R.styleable.ItemMenuCustom_itmIcon));
     }
 
-    public void setIcon(int resource) {
+    public ItemMenuCustom(Context context, AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs);
+    }
+
+
+    /* Устанавливает дейсвтие совершаемое при нажатии на пункт*/
+    public void setAction(Runnable action) {
+        this.action = action;
+    }
+
+    public void setIcon(Drawable resource) {
         icon = new ImageView(context);
-        icon.setImageResource(resource);
+        icon.setImageDrawable(resource);
         addViews();
     }
 
     public void setTitle(int text) {
         title = new TextView(context);
         title.setText(text);
-        title.setPadding(padding_medium, 0, 0, 0);
+        title.setPadding(padding_high, 0, 0, 0);
+        addViews();
+    }
+
+    public void setTitle(String text) {
+        title = new TextView(context);
+        title.setText(text);
+        title.setPadding(padding_high, 0, 0, 0);
         addViews();
     }
 
@@ -58,28 +79,11 @@ public class ItemMenuCustom extends LinearLayout {
     }
 
     private void init() {
-        this.setOnTouchListener(createListener());
         LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT);
         setLayoutParams(params);
         padding_medium = (int) getResources().getDimension(R.dimen.padding_medium);
         padding_high = (int) getResources().getDimension(R.dimen.padding_high);
         setPadding(padding_medium, padding_medium, padding_medium, padding_medium);
-    }
-
-    private OnTouchClickListener createListener() {
-        return new OnTouchClickListener(action) {
-            @Override
-            public void select() {
-                super.select();
-                setBackgroundColor(Color.LTGRAY);
-            }
-
-            @Override
-            public void deSelect() {
-                super.deSelect();
-                setBackground(null);
-            }
-        };
     }
 }
