@@ -44,10 +44,10 @@ public class ControllerNavigationView extends BaseController {
     public ControllerNavigationView(Context context, ViewGroup content) {
         super(context, content);
         avatar = (CircularImageView) content.findViewById(AVATAR);
+        avatar.setImageResource(R.drawable.menu_background);
         nameProfile = (TextView) content.findViewById(NAME_PROFILE);
         lastEvents = (LinearLayout) content.findViewById(CONTAINER_LASTS_EVENT);
         initListeners();
-        setDefaultValue();
         setCountLastEvent(3);
     }
 
@@ -108,7 +108,7 @@ public class ControllerNavigationView extends BaseController {
     }
 
     private void initListeners() {
-        for(int id : LIST_ITEM_MENU)
+        for (int id : LIST_ITEM_MENU)
             getContent().findViewById(id).setOnTouchListener(new OnTouchClickListenerBase() {
                 @Override
                 public void select(View v) {
@@ -125,7 +125,6 @@ public class ControllerNavigationView extends BaseController {
                     actionClickItemMenu(v);
                 }
             });
-
 
 
         avatar.setOnTouchListener(new OnTouchClickListenerBase() {
@@ -154,6 +153,7 @@ public class ControllerNavigationView extends BaseController {
                 Services.contentManager.showEventBoard();
                 break;
             case R.id.im_favorites:
+                Services.contentManager.showFavoriteEvent();
                 break;
             case R.id.im_group_add:
                 break;
@@ -166,8 +166,8 @@ public class ControllerNavigationView extends BaseController {
     /* Удалить, создано для теста*/
     @Deprecated
     private void setDefaultValue() {
-        setAvatar(res.getDrawable(R.drawable.avatar));
-        setProfileName(new String[]{"Исхаков", "Ильнур"});
+        //setAvatar(res.getDrawable(R.drawable.avatar));
+        //setProfileName(new String[]{"Исхаков", "Ильнур"});
     }
 
     @Override

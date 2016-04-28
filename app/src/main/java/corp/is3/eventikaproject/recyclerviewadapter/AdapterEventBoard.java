@@ -10,10 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
 import corp.is3.eventikaproject.R;
+import corp.is3.eventikaproject.listeners.ImageLoadingListener;
 import corp.is3.eventikaproject.listeners.OnTouchClickListenerBase;
 import corp.is3.eventikaproject.services.Services;
 import corp.is3.eventikaproject.structures.EventInfo;
@@ -28,6 +30,11 @@ public class AdapterEventBoard extends RecyclerView.Adapter<AdapterEventBoard.Ev
 
     public void addItem(EventInfo event) {
         listEvent.add(event);
+    }
+
+    public void clear() {
+        if(listEvent != null)
+            listEvent.clear();
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
@@ -104,6 +111,15 @@ public class AdapterEventBoard extends RecyclerView.Adapter<AdapterEventBoard.Ev
     @Override
     public void onBindViewHolder(EventViewHolder holder, int position) {
         EventInfo event = listEvent.get(position);
+        holder.nameEventCard.setText(event.getName());
+        holder.paramOne.setText(String.format("%s %s", event.getCity(), event.getAddress()));
+        holder.paramTwo.setText(event.getBeginDate());
+        holder.paramThree.setText(event.getEndDate());
+        holder.imageEventCard.setImageResource(R.drawable.default_img);
+        if(event.getImage() == null)
+            ImageLoader.getInstance().displayImage(event.getUrlImage(), holder.imageEventCard, new ImageLoadingListener(event));
+        else
+            holder.imageEventCard.setImageDrawable(event.getImage());
         holder.info = event;
     }
 

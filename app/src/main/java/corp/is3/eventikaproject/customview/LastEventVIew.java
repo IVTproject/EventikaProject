@@ -3,6 +3,7 @@ package corp.is3.eventikaproject.customview;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,30 +42,34 @@ public class LastEventVIew extends RelativeLayout {
 
     /* Создание и заполнение информацийей элемента*/
     private void init(Context context) {
-        setPadding(0, 0, 0, paddingSmall);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 128);
+        //setPadding(0, 0, 0, paddingSmall);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams paramsV = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        params.topMargin = paddingSmall / 2;
+        params.bottomMargin = paddingSmall / 2;
         setLayoutParams(params);
         ImageView image = new ImageView(context);
-        image.setImageDrawable(eventInfo.image == null ? getResources().getDrawable(R.drawable.not_image) : eventInfo.image);
-        image.setScaleType(ImageView.ScaleType.CENTER);
+        image.setImageDrawable(eventInfo.getImage() == null ? getResources().getDrawable(R.drawable.default_img) : eventInfo.getImage());
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
         image.setLayoutParams(params);
+
 
         shadow = new View(context);
         shadow.setBackgroundColor(Color.BLACK);
         shadow.setAlpha(powerShadow);
-        shadow.setLayoutParams(params);
+        shadow.setLayoutParams(paramsV);
 
         TextView nameView = new TextView(context);
         nameView.setPadding(paddingMedium, paddingSmall, 0, 0);
         nameView.setTextColor(Color.WHITE);
-        nameView.setText(eventInfo.name == null ? "Без назавания" : eventInfo.name);
+        nameView.setText(eventInfo.getName() == null ? "Без назавания" : eventInfo.getName());
         nameView.setTextSize(textSize);
         nameView.setLayoutParams(params);
 
         StringBuilder periud = new StringBuilder();
-        periud.append(eventInfo.beginDate == null ? "1 января 1970 года" : eventInfo.beginDate);
+        periud.append(eventInfo.getBeginDate() == null ? "1 января 1970 года" : eventInfo.getBeginDate());
         periud.append(" - ");
-        periud.append(eventInfo.endDate == null ? "1 января 1970 года" : eventInfo.endDate);
+        periud.append(eventInfo.getEndDate() == null ? "1 января 1970 года" : eventInfo.getEndDate());
 
         TextView dateView = new TextView(context);
         dateView.setPadding(paddingMedium * 2, (int) (paddingSmall * 2 + textSize), 0, 0);

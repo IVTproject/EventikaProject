@@ -6,10 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginBottom="@dimen/padding_small"
     android:layout_marginLeft="@dimen/padding_very_small"
     android:layout_marginRight="@dimen/padding_very_small"
-    android:layout_marginTop="@dimen/padding_small"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="corp.is3.eventikaproject.MainActivity"
     tools:showIn="@layout/app_bar_main">

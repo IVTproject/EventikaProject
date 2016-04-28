@@ -15,4 +15,6 @@
     <string name="block_event_param_two">Дата начала:</string>
     <string name="block_event_param_three">Дата конца:</string>
 
+    <string name="error_connection">Ошибка! Проверьте интернет соеденение.</string>
+
 </resources>
