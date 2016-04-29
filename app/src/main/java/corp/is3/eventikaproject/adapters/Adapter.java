@@ -1,5 +1,7 @@
 package corp.is3.eventikaproject.adapters;
 
+import android.content.Context;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,15 +19,18 @@ public abstract class Adapter {
 
     private String jsonText;
     private ArrayList result;
+    private Context context;
 
     private int resultCode = NOT_ACTION;
 
-    public Adapter() {
+    public Adapter(Context context) {
+        this(null, context);
     }
 
-    public Adapter(Object jsonText) {
+    public Adapter(Object jsonText, Context context) {
         if(jsonText != null)
             this.jsonText = jsonText.toString();
+        this.context = context;
     }
 
     public ArrayList convert(Object data) {
@@ -46,6 +51,10 @@ public abstract class Adapter {
         if (result == null)
             result = convert(jsonText);
         return result;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public int getResultCode() {

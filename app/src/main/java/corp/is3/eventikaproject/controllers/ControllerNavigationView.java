@@ -8,8 +8,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
 
@@ -26,6 +28,8 @@ public class ControllerNavigationView extends BaseController {
     private final int AVATAR = R.id.avatar_menu;
     /* id имени пользователя(TextView) находящегося в header*/
     private final int NAME_PROFILE = R.id.name_profile;
+    /* Кнопка настройки профиля*/
+    private final int SETTING_BUTTON = R.id.icon_setting;
     /* id блока в который буду складироваться последние посещеные мероприятия*/
     private final int CONTAINER_LASTS_EVENT = R.id.container_last_event;
 
@@ -41,20 +45,24 @@ public class ControllerNavigationView extends BaseController {
     private DrawerLayout drawer;
     private LinearLayout lastEvents;
 
+    private ImageView settingButton;
+
     public ControllerNavigationView(Context context, ViewGroup content) {
         super(context, content);
         avatar = (CircularImageView) content.findViewById(AVATAR);
-        avatar.setImageResource(R.drawable.menu_background);
         nameProfile = (TextView) content.findViewById(NAME_PROFILE);
         lastEvents = (LinearLayout) content.findViewById(CONTAINER_LASTS_EVENT);
+        settingButton = (ImageView) content.findViewById(SETTING_BUTTON);
         initListeners();
         setCountLastEvent(3);
     }
 
+    /* Добавляет DrawerLayout что бы происходило закрытие меню после выбора пункта*/
     public void setDrawer(DrawerLayout drawer) {
         this.drawer = drawer;
     }
 
+    /* Устанавливает колличество показываемых последних мероприятий*/
     public void setCountLastEvent(int count) {
         count_last_event = count;
     }
@@ -84,6 +92,11 @@ public class ControllerNavigationView extends BaseController {
                 ((LastEventVIew) v).getEventInfo();
             }
         });
+    }
+
+    @Override
+    public void refresh() {
+
     }
 
     public boolean setAvatar(Drawable image) {
@@ -142,6 +155,25 @@ public class ControllerNavigationView extends BaseController {
             public void click(View v, boolean longClick) {
             }
         });
+
+        settingButton.setOnTouchListener(new OnTouchClickListenerBase() {
+            @Override
+            public void select(View v) {
+               // settingButton.setScaleX(1.2f);
+               // settingButton.setScaleY(1.2f);
+            }
+
+            @Override
+            public void deSelect(View v) {
+               // settingButton.setScaleX(1.0f);
+               // settingButton.setScaleY(1.0f);
+            }
+
+            @Override
+            public void click(View v, boolean longClick) {
+                Services.contentManager.openSettingProfile();
+            }
+        });
     }
 
     private void actionClickItemMenu(View v) {
@@ -168,10 +200,5 @@ public class ControllerNavigationView extends BaseController {
     private void setDefaultValue() {
         //setAvatar(res.getDrawable(R.drawable.avatar));
         //setProfileName(new String[]{"Исхаков", "Ильнур"});
-    }
-
-    @Override
-    public void refresh() {
-
     }
 }

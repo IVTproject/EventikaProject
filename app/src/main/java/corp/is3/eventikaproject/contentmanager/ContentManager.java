@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import corp.is3.eventikaproject.MainActivity;
 import corp.is3.eventikaproject.R;
+import corp.is3.eventikaproject.SettingActivity;
 import corp.is3.eventikaproject.controllers.ControllerEventBoard;
 import corp.is3.eventikaproject.reuests.CallbackFunction;
 import corp.is3.eventikaproject.reuests.QueryDesigner;
@@ -46,6 +48,7 @@ public class ContentManager {
         showScreen(controllerEventBoard.getContent());
     }
 
+    /* Показать доску избранных мероприятий*/
     public void showFavoriteEvent() {
         final TextView text = new TextView(ACTIVITY);
         QueryDesigner qd = new QueryDesigner();
@@ -58,6 +61,11 @@ public class ContentManager {
                 ContentManager.this.container.addView(text);
             }
         });
+    }
+
+    public void openSettingProfile() {
+        Intent intent = new Intent(ACTIVITY, SettingActivity.class);
+        ACTIVITY.startActivity(intent);
     }
 
     private void showScreen(View newScreen) {

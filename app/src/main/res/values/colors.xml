@@ -6,4 +6,8 @@
 
 
     <color name="colorIcon">#abb0b4</color>
+
+    <color name="background_content">#e9e9e9</color>
+
+    <color name="title_item_setting">#4b54ed</color>
 </resources>

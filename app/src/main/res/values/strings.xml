@@ -15,6 +15,39 @@
     <string name="block_event_param_two">Дата начала:</string>
     <string name="block_event_param_three">Дата конца:</string>
 
+    <array name="months">
+        <item>Января</item>
+        <item>Февраля</item>
+        <item>Марта</item>
+        <item>Апреля</item>
+        <item>Мая</item>
+        <item>Июня</item>
+        <item>Июля</item>
+        <item>Августа</item>
+        <item>Сентября</item>
+        <item>Октября</item>
+        <item>Ноября</item>
+        <item>Декабря</item>
+    </array>
+
+    <string name="years">года</string>
+
     <string name="error_connection">Ошибка! Проверьте интернет соеденение.</string>
+
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_setting">Настройки</string>
+
+    <string name="ready">Готово</string>
+
+    <string name="last_name">Фамилия</string>
+    <string name="first_name">Имя</string>
+
+    <string name="field_interest">Сфера интересов:</string>
+
+    <array name="interest">
+        <item>Инвормационые технологии 1</item>
+        <item>Инвормационые технологии 2</item>
+        <item>Инвормационые технологии 3</item>
+    </array>
 
 </resources>

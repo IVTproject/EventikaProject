@@ -83,7 +83,7 @@ public class ControllerEventBoard extends BaseController {
 
             @Override
             public void callable(String response) {
-                AdapterEventInfo adapter = new AdapterEventInfo(response);
+                AdapterEventInfo adapter = new AdapterEventInfo(response, getContext());
                 ArrayList eventsCard = adapter.getResult();
                 if (eventsCard != null)
                     addEvents(eventsCard);

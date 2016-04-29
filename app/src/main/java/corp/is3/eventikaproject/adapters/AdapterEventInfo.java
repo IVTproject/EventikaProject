@@ -1,27 +1,25 @@
 package corp.is3.eventikaproject.adapters;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
+import corp.is3.eventikaproject.R;
 import corp.is3.eventikaproject.structures.EventInfo;
 
 public class AdapterEventInfo extends Adapter {
 
-    public AdapterEventInfo() {
-        super();
+    public AdapterEventInfo(Context context) {
+        super(context);
     }
 
-    public AdapterEventInfo(Object data) {
-        super(data);
+    public AdapterEventInfo(Object data, Context context) {
+        super(data, context);
     }
 
     @Override
@@ -60,10 +58,11 @@ public class AdapterEventInfo extends Adapter {
         String[] date = dt[0].split("-");
         result.append(date[2]);
         result.append(" ");
-        result.append(mouth(Integer.parseInt(date[1])));
+        result.append(months(Integer.parseInt(date[1])));
         result.append(" ");
         result.append(date[0]);
-        result.append(" года");
+        result.append(" ");
+        result.append(getContext().getString(R.string.years));
         if(!end) {
             ei.setBeginDate(result.toString());
             ei.setBeginTime(dt[1].substring(0, dt[1].lastIndexOf(":")));
@@ -73,34 +72,12 @@ public class AdapterEventInfo extends Adapter {
         }
     }
 
-    private String mouth(int number) {
-        switch (number) {
-            case 1:
-                return "Января";
-            case 2:
-                return "Февраля";
-            case 3:
-                return "Марат";
-            case 4:
-                return "Апреля";
-            case 5:
-                return "Мая";
-            case 6:
-                return "Июня";
-            case 7:
-                return "Июля";
-            case 8:
-                return "Августа";
-            case 9:
-                return "Сентября";
-            case 10:
-                return "Октября";
-            case 11:
-                return "Ноября";
-            case 12:
-                return "Декабря";
-            default:
-                return "";
-        }
+    private String months(int number) {
+        Resources r = getContext().getResources();
+        String[] months = r.getStringArray(R.array.months);
+        if(number <= 12 && number > 0)
+            return months[number - 1];
+        else
+            return "";
     }
 }
