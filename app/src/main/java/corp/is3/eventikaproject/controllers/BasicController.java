@@ -2,17 +2,18 @@ package corp.is3.eventikaproject.controllers;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 
-public abstract class BaseController {
+public abstract class BasicController {
 
     protected Resources res;
-    private Context context;
+    private AppCompatActivity compatActivity;
     private ViewGroup content;
 
-    public BaseController(Context context, ViewGroup content) {
+    public BasicController(AppCompatActivity compatActivity, ViewGroup content) {
         this.content = content;
-        this.context = context;
+        this.compatActivity = compatActivity;
         res = content.getResources();
     }
 
@@ -20,8 +21,8 @@ public abstract class BaseController {
         return content;
     }
 
-    public Context getContext() {
-        return context;
+    public AppCompatActivity getAppCompatActivity() {
+        return compatActivity;
     }
 
     public abstract void refresh();

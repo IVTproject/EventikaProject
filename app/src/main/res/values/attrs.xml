@@ -47,6 +47,11 @@
         <attr name="itmIcon" format="integer|reference"></attr>
     </declare-styleable>
 
+    <declare-styleable name="ItemSettingArrow">
+        <attr name="nameItm" format="string|reference"></attr>
+        <attr name="iconItm" format="integer|reference"></attr>
+    </declare-styleable>
+
     <declare-styleable name="CustomTextView">
         <attr name="font" format="string|reference"></attr>
     </declare-styleable>

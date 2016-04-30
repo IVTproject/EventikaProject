@@ -103,7 +103,7 @@ public abstract class OnTouchClickListenerBase implements View.OnTouchListener {
                         }
                     });
                 }
-            }, 200);
+            }, 100);
             click(v, false);
         }
     }

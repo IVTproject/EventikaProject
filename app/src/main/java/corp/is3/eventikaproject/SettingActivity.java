@@ -1,5 +1,6 @@
 package corp.is3.eventikaproject;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,14 +16,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import corp.is3.eventikaproject.controllers.settingactivity.ControllerProfileSetting;
+
 public class SettingActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+    private static AppCompatActivity compatActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        compatActivity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setteing);
 
@@ -35,7 +40,6 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -59,7 +63,7 @@ public class SettingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PlaceholderFragment extends Fragment {
+    protected static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -80,7 +84,7 @@ public class SettingActivity extends AppCompatActivity {
             View rootView;
             switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
-                    rootView = inflater.inflate(R.layout.seting_profile_tab_layout, container, false);
+                    rootView = new ControllerProfileSetting(compatActivity, (ViewGroup)inflater.inflate(R.layout.seting_profile_tab_layout, container, false)).getContent();
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.seting_app_tab_layout, container, false);
@@ -92,7 +96,7 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    protected class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);

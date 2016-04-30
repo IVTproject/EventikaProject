@@ -25,6 +25,7 @@ import java.io.IOException;
 import corp.is3.eventikaproject.contentmanager.ContentManager;
 import corp.is3.eventikaproject.controllers.ControllerEventBoard;
 import corp.is3.eventikaproject.controllers.ControllerNavigationView;
+import corp.is3.eventikaproject.datamanager.DataManager;
 import corp.is3.eventikaproject.services.Services;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,14 +38,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .denyCacheImageMultipleSizesInMemory()
-                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-                .memoryCacheSize(10 * 1024 * 1024)
-                .diskCacheSize(50 * 1024 * 1024)
-                .diskCacheFileCount(100)
-                .build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         ImageLoader.getInstance().init(config);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -64,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         Services.controllerNavigationView = controllerNavigationView;
         Services.contentManager = contentManager;
+        Services.dataManager = new DataManager();
     }
 
     @Override

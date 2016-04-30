@@ -1,17 +1,15 @@
 package corp.is3.eventikaproject.controllers;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
 
@@ -22,7 +20,7 @@ import corp.is3.eventikaproject.services.Services;
 import corp.is3.eventikaproject.structures.EventInfo;
 
 /* Контроллер для работы с боковым меню*/
-public class ControllerNavigationView extends BaseController {
+public class ControllerNavigationView extends BasicController {
 
     /* id аватара(ImageView) находящегося в header*/
     private final int AVATAR = R.id.avatar_menu;
@@ -47,8 +45,8 @@ public class ControllerNavigationView extends BaseController {
 
     private ImageView settingButton;
 
-    public ControllerNavigationView(Context context, ViewGroup content) {
-        super(context, content);
+    public ControllerNavigationView(AppCompatActivity compatActivity, ViewGroup content) {
+        super(compatActivity, content);
         avatar = (CircularImageView) content.findViewById(AVATAR);
         nameProfile = (TextView) content.findViewById(NAME_PROFILE);
         lastEvents = (LinearLayout) content.findViewById(CONTAINER_LASTS_EVENT);
@@ -69,7 +67,7 @@ public class ControllerNavigationView extends BaseController {
 
     /* Добавляет пункт в блоке "Последние посещеные"*/
     public void visitedEvent(EventInfo eventInfo) {
-        LastEventVIew eventVIew = new LastEventVIew(getContext(), eventInfo);
+        LastEventVIew eventVIew = new LastEventVIew(getAppCompatActivity(), eventInfo);
         if (lastEvents.getChildCount() < count_last_event) {
             lastEvents.addView(eventVIew);
         } else {

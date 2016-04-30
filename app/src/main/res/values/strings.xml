@@ -42,12 +42,17 @@
     <string name="last_name">Фамилия</string>
     <string name="first_name">Имя</string>
 
-    <string name="field_interest">Сфера интересов:</string>
+    <string name="filtering">Фильтрация мероприятий:</string>
+    <string name="social_network">Социальные сети:</string>
+    <string name="contact_information">Контактная информация:</string>
 
-    <array name="interest">
-        <item>Инвормационые технологии 1</item>
-        <item>Инвормационые технологии 2</item>
-        <item>Инвормационые технологии 3</item>
-    </array>
+    <string name="field_interest">Сферы интересов</string>
+    <string name="citys">Города</string>
+
+    <string name="email">email</string>
+    <string name="number_phone">Номер телефона</string>
+
+    <string name="vk">Профиль "Вконтакте"</string>
+    <string name="facebook">Профиль "FaceBook"</string>
 
 </resources>

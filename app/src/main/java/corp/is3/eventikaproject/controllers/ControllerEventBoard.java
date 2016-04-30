@@ -1,8 +1,8 @@
 package corp.is3.eventikaproject.controllers;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +21,7 @@ import corp.is3.eventikaproject.reuests.QueryDesigner;
 import corp.is3.eventikaproject.reuests.QueryManager;
 import corp.is3.eventikaproject.structures.EventInfo;
 
-public class ControllerEventBoard extends BaseController {
+public class ControllerEventBoard extends BasicController {
 
     private final int RECYCLER_VIEW_ID = R.id.list_event_card;
     private final int MARGIN = 8;
@@ -29,10 +29,10 @@ public class ControllerEventBoard extends BaseController {
     private RecyclerView recyclerView;
     private LinearLayoutManager llm;
 
-    public ControllerEventBoard(Context context, ViewGroup content) {
-        super(context, content);
+    public ControllerEventBoard(AppCompatActivity compatActivity, ViewGroup content) {
+        super(compatActivity, content);
         recyclerView = (RecyclerView) content.findViewById(RECYCLER_VIEW_ID);
-        llm = new LinearLayoutManager(context);
+        llm = new LinearLayoutManager(compatActivity);
         recyclerView.setLayoutManager(llm);
         ArrayList<EventInfo> l = new ArrayList<>();
         recyclerView.setAdapter(new AdapterEventBoard(l));
@@ -83,21 +83,21 @@ public class ControllerEventBoard extends BaseController {
 
             @Override
             public void callable(String response) {
-                AdapterEventInfo adapter = new AdapterEventInfo(response, getContext());
+                AdapterEventInfo adapter = new AdapterEventInfo(response, getAppCompatActivity());
                 ArrayList eventsCard = adapter.getResult();
                 if (eventsCard != null)
                     addEvents(eventsCard);
                 else
-                    message(getContext().getResources().getString(R.string.error_connection));
+                    message(getAppCompatActivity().getResources().getString(R.string.error_connection));
             }
         });
 
     }
 
     private void message(String text) {
-        Toast toast = Toast.makeText(getContext(), text,
+        Toast toast = Toast.makeText(getAppCompatActivity(), text,
                 Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM, 0, (int) getContext().getResources().getDimension(R.dimen.padding_high));
+        toast.setGravity(Gravity.BOTTOM, 0, (int) getAppCompatActivity().getResources().getDimension(R.dimen.padding_high));
         toast.show();
     }
 }
