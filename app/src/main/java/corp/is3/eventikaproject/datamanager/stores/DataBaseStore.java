@@ -1,4 +1,4 @@
-package corp.is3.eventikaproject.cache;
+package corp.is3.eventikaproject.datamanager.stores;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder;
 import corp.is3.eventikaproject.dbm.DataBase;
 
 // T - тип класса с котором будет вестить работа
-public class Cache<T> {
+public class DataBaseStore<T> implements Store<T> {
 
     private final String TABLE_NAME = "cache";
     private final Context CONTEXT;
@@ -20,12 +20,20 @@ public class Cache<T> {
 
     private final long TIME_REMOVAL = 3 * 24 * 60 * 60 * 1000;
 
+    private Class typeObject;
+
     private boolean isOneSession = false;
 
-    public Cache(Context context) {
+    public DataBaseStore(Context context, Class typeObject) {
         CONTEXT = context;
         DB = new DataBase(CONTEXT);
+        this.typeObject = typeObject;
         removeOld();
+    }
+
+    // Надо сделать :)
+    public void setPeriodStorage(int numberHours) {
+
     }
 
     public void isOneSession(boolean isOneSession) {
@@ -35,18 +43,18 @@ public class Cache<T> {
     /**
      * запись в БД объекта "data" под ключем "key"
      */
-    public boolean cacheData(String key, T data, Class typeObject) {
+    public boolean setData(String key, T data) {
         ContentValues values = toContentValues(key, data);
         long id = -1;
         if (values != null)
             try {
                 SQLiteDatabase db = DB.getWritableDatabase();
-                if (getData(key, typeObject) == null)
+                if (getData(key) == null)
                     id = db.insert(TABLE_NAME, null, values);
                 else
                     db.update(TABLE_NAME, values, "key=?", new String[]{key});
             } catch (Exception e) {
-                Log.e("Cache", e.toString());
+                Log.e("DBS", e.toString());
                 id = -1;
             }
         return id != -1;
@@ -55,7 +63,7 @@ public class Cache<T> {
     /**
      * получение объекта из БД по ключу "key"
      */
-    public T getData(String key, Class typeObject) {
+    public T getData(String key) {
         if (key == null)
             return null;
         Cursor response = DB.getReadableDatabase().query(TABLE_NAME, null, "key = ?", new String[]{key}, null, null, null);
@@ -65,7 +73,7 @@ public class Cache<T> {
             int ind = response.getColumnIndex("value");
             value = jsonToJavaObject(response.getString(ind), typeObject);
         } catch (Exception e) {
-            Log.e("Cache", e.toString());
+            Log.e("DBS", e.toString());
         } finally {
             response.close();
         }

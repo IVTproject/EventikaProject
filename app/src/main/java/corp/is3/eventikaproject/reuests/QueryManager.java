@@ -24,6 +24,10 @@ public class QueryManager {
         }).start();
     }
 
+    public void query(QueryDesigner queryDesigner, CallbackFunction callbackFunction) {
+        query(queryDesigner.getURL(), callbackFunction);
+    }
+
     private void queryToServer(final String url, final CallbackFunction callbackFunction, final Handler h) {
         URL u;
         HttpURLConnection conn;

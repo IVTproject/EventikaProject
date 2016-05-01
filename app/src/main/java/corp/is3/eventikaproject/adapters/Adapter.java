@@ -7,21 +7,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Дмитрий on 28.04.2016.
- */
 public abstract class Adapter {
 
-    public final static int NOT_ACTION = 0;
-    public final static int OK = 1;
-    public final static int ERROR = 2;
-    public final static int DATA_NULL = 3;
+    public static final int NOT_ACTION = 0;
+    public static final int PARSE_ERROR = 1;
+
+    public static final int CODE_OK = 200;
+    public static final int CODE_ERROR = 500;
+    public static final int CODE_NOT_FOUND = 404;
+    public static final int CODE_NOT_REG = 101;
+    public static final int CODE_NOT_AUTH = 102;
 
     private String jsonText;
     private ArrayList result;
     private Context context;
 
-    private int resultCode = NOT_ACTION;
+    protected int resultCode = NOT_ACTION;
 
     public Adapter(Context context) {
         this(null, context);
@@ -31,24 +32,17 @@ public abstract class Adapter {
         if(jsonText != null)
             this.jsonText = jsonText.toString();
         this.context = context;
+        result = getResult();
     }
 
     public ArrayList convert(Object data) {
-        if (data == null) {
-            resultCode = DATA_NULL;
-            return result;
-        } else {
+        if (result == null && jsonText != null)
             result = convert(getData(data.toString()));
-        }
-        if (result != null)
-            resultCode = OK;
-        else
-            resultCode = ERROR;
         return result;
     }
 
     public ArrayList getResult() {
-        if (result == null)
+        if (result == null && jsonText != null)
             result = convert(jsonText);
         return result;
     }
@@ -72,10 +66,8 @@ public abstract class Adapter {
         try {
             JSONObject jsonObject = new JSONObject(jsonText);
             JSONObject data = jsonObject.getJSONObject("data");
-            if(jsonObject.getInt("code") == 200)
-                return data;
-            else
-                return null;
+            resultCode = jsonObject.getInt("code");
+            return data;
         } catch (JSONException e) {
             return new JSONObject();
         }

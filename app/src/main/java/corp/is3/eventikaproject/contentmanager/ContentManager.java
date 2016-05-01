@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import corp.is3.eventikaproject.LoginActivity;
 import corp.is3.eventikaproject.MainActivity;
 import corp.is3.eventikaproject.R;
 import corp.is3.eventikaproject.SettingActivity;
@@ -66,6 +67,11 @@ public class ContentManager {
 
     public void openSettingProfile() {
         Intent intent = new Intent(COMPAT_ACTIVITY, SettingActivity.class);
+        COMPAT_ACTIVITY.startActivity(intent);
+    }
+
+    public void openAuthorization() {
+        Intent intent = new Intent(COMPAT_ACTIVITY, LoginActivity.class);
         COMPAT_ACTIVITY.startActivity(intent);
     }
 

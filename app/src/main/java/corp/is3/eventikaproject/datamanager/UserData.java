@@ -1,41 +1,36 @@
 package corp.is3.eventikaproject.datamanager;
 
-import java.util.HashSet;
-import java.util.Set;
+import android.content.Context;
+
+import java.util.Arrays;
+
+import corp.is3.eventikaproject.datamanager.stores.Store;
+import corp.is3.eventikaproject.structures.UserInfo;
 
 public class UserData implements BasicData {
 
-    private Set<String> userInterest;
-    private Set<String> userSelectedCity;
+    private final String KEY_FROM_SAVE = "userInfo";
 
-    protected UserData() {
-        userInterest = new HashSet<>();
-        userSelectedCity = new HashSet<>();
+    private UserInfo userInfo;
+    private Store<UserInfo> store;
+
+    protected UserData(Store<UserInfo> store) {
+        this.store = store;
     }
 
-    public String[] getInterests() {
-        return toArray(userInterest);
-    }
-
-    public String[] getSelectedCity() {
-        return toArray(userSelectedCity);
+    public UserInfo getInformationFromUser() {
+        return userInfo;
     }
 
     @Override
     public void load() {
-
+        userInfo = store.getData(KEY_FROM_SAVE);
+        if(userInfo == null)
+            userInfo = new UserInfo();
     }
 
     @Override
     public void save() {
-
-    }
-
-    private String[] toArray(Set<String> set) {
-        String[] result = new String[set.size()];
-        for (int i = 0; i < set.size(); i++)
-            if (set.iterator().hasNext())
-                result[i] = set.iterator().next();
-        return result;
+        store.setData(KEY_FROM_SAVE, userInfo);
     }
 }

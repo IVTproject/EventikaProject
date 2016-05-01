@@ -49,10 +49,23 @@
     <string name="field_interest">Сферы интересов</string>
     <string name="citys">Города</string>
 
-    <string name="email">email</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Повторите пароль</string>
+    <string name="auth">Авторизироваться</string>
+    <string name="registration">Зарегистрироваться</string>
     <string name="number_phone">Номер телефона</string>
 
     <string name="vk">Профиль "Вконтакте"</string>
     <string name="facebook">Профиль "FaceBook"</string>
+
+    <string name="offer_to_log_text">Что бы редактировать профиль, авторизируйтесь(зарегестрируйтесь)</string>
+    <string name="offer_to_log_button">Авторизироваться</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <string name="error_email_not_right">Не корректный email</string>
+    <string name="error_email_small">Слишком короткий email</string>
+    <string name="error_password">Слишком короткий пароль</string>
+    <string name="error_confirm_password">Пароли не совпадают</string>
 
 </resources>

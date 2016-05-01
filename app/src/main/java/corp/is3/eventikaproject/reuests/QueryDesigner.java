@@ -1,15 +1,13 @@
 package corp.is3.eventikaproject.reuests;
 
-import java.util.Map;
+import android.os.DropBoxManager;
 
-/**
- * Created by Дмитрий on 26.04.2016.
- */
+import java.util.Map;
+import java.util.Set;
+
 public class QueryDesigner {
 
-    public static enum QUERY_TYPE {LIST_EVENT, EVENT_INFO, FAVORITE_EVENT}
-
-    ;
+    public static enum QUERY_TYPE {LIST_EVENT, EVENT_INFO, FAVORITE_EVENT, ADD_NEW_USER};
 
     private final String DOMAIN_API = "http://eventikas.esy.es/index.php/api/";
 
@@ -50,16 +48,34 @@ public class QueryDesigner {
 
         switch (type) {
             case LIST_EVENT:
-                reuest.append("getEvents/begin/").append(begin).append("/count/").append(count);
+                reuest.append("getEvents").append(limit());
                 break;
             case EVENT_INFO:
                 break;
             case FAVORITE_EVENT:
                 break;
+            case ADD_NEW_USER:
+                reuest.append("addNewUser").append(conditions());
+                break;
             default:
                 throw new NullPointerException();
         }
         return reuest.toString();
+    }
+
+    private String limit() {
+        return new StringBuilder("/begin/").
+                append(begin).append("/count/").
+                append(count).toString();
+    }
+
+    private String conditions() {
+        StringBuilder conditionsUrl = new StringBuilder();
+        Set<Map.Entry<Object, Object>> conditions = this.conditions.entrySet();
+        for (Map.Entry<Object, Object> item : conditions) {
+            conditionsUrl.append("/").append(item.getKey()).append("/").append(item.getValue());
+        }
+        return  conditionsUrl.toString();
     }
 
 }

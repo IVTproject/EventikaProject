@@ -10,4 +10,6 @@ public class Services {
     public static ControllerNavigationView controllerNavigationView;
     public static ContentManager contentManager;
     public static DataManager dataManager;
+
+    private Services(){}
 }

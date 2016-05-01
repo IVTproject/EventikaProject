@@ -14,8 +14,9 @@ import corp.is3.eventikaproject.dialogframes.DialogSelector;
 import corp.is3.eventikaproject.dialogframes.SelectItemsListener;
 import corp.is3.eventikaproject.listeners.OnTouchClickListenerBase;
 import corp.is3.eventikaproject.services.Services;
+import corp.is3.eventikaproject.structures.UserInfo;
 
-public class ControllerProfileSetting extends BasicController {
+public class ControllerProfileSetting extends BasicController implements SettingController {
 
     private final int FIELD_INTEREST = R.id.select_field_interest;
 
@@ -34,17 +35,31 @@ public class ControllerProfileSetting extends BasicController {
     public ControllerProfileSetting(AppCompatActivity compatActivity, ViewGroup content) {
         super(compatActivity, content);
         selectors = new ArrayList<>();
-        listInterest = Services.dataManager.getLoadableData().getListInterests();
-        listCity = Services.dataManager.getLoadableData().getListCity();
-        selectedInterest = Services.dataManager.getUserData().getInterests();
-        selectedCity = Services.dataManager.getUserData().getSelectedCity();
         r = compatActivity.getResources();
+        loadSetting();
         initFields();
         initListener();
     }
 
     @Override
     public void refresh() {
+        loadSetting();
+    }
+
+    @Override
+    public void loadSetting() {
+        UserInfo info = Services.dataManager.getUserData().getInformationFromUser();
+        listInterest = Services.dataManager.getLoadableData().getListInterests();
+        listCity = Services.dataManager.getLoadableData().getListCity();
+        selectedInterest = info.getInterest();
+        selectedCity = info.getCitys();
+    }
+
+    @Override
+    public void saveSetting() {
+        UserInfo info = Services.dataManager.getUserData().getInformationFromUser();
+        info.setInterest(selectedInterest);
+        info.setCitys(selectedCity);
     }
 
     private void initFields() {

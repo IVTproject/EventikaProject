@@ -1,6 +1,12 @@
 package corp.is3.eventikaproject.datamanager;
 
+import android.content.Context;
+
 import java.util.ArrayList;
+
+import corp.is3.eventikaproject.datamanager.stores.SharedPreferencesStore;
+import corp.is3.eventikaproject.structures.EventInfo;
+import corp.is3.eventikaproject.structures.UserInfo;
 
 public class DataManager implements BasicData {
 
@@ -9,9 +15,9 @@ public class DataManager implements BasicData {
     private UserData userData;
     private LoadableData loadableData;
 
-    public DataManager() {
+    public DataManager(Context context) {
         dataObjects = new ArrayList<>();
-        userData = new UserData();
+        userData = new UserData(new SharedPreferencesStore<UserInfo>(context, UserInfo.class));
         loadableData = new LoadableData();
         dataObjects.add(userData);
         dataObjects.add(loadableData);
@@ -28,12 +34,12 @@ public class DataManager implements BasicData {
     @Override
     public void load() {
         for(BasicData bd : dataObjects)
-            bd.load();
+          bd.load();
     }
 
     @Override
     public void save() {
         for(BasicData bd : dataObjects)
-            bd.save();
+          bd.save();
     }
 }

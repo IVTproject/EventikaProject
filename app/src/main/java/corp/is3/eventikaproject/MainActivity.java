@@ -47,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        drawer.addDrawerListener(toggle);
 
         controllerNavigationView = new ControllerNavigationView(this, navigationView);
         controllerNavigationView.setDrawer(drawer);
@@ -60,7 +62,19 @@ public class MainActivity extends AppCompatActivity {
 
         Services.controllerNavigationView = controllerNavigationView;
         Services.contentManager = contentManager;
-        Services.dataManager = new DataManager();
+        Services.dataManager = new DataManager(this);
+        Services.dataManager.load();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Services.dataManager.save();
     }
 
     @Override

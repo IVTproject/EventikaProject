@@ -1,15 +1,13 @@
 package corp.is3.eventikaproject;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import corp.is3.eventikaproject.controllers.settingactivity.ControllerProfileSetting;
+import corp.is3.eventikaproject.services.Services;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -24,6 +23,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private static AppCompatActivity compatActivity;
+    private static ControllerProfileSetting controllerProfileSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -47,6 +48,10 @@ public class SettingActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    public void authorization(View v) {
+        Services.contentManager.openAuthorization();
     }
 
     @Override
@@ -58,7 +63,13 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            case R.id.save_setting:
+                finish();
+                if (controllerProfileSetting != null) {
+                    controllerProfileSetting.saveSetting();
+                    controllerProfileSetting = null;
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -84,7 +95,13 @@ public class SettingActivity extends AppCompatActivity {
             View rootView;
             switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
-                    rootView = new ControllerProfileSetting(compatActivity, (ViewGroup)inflater.inflate(R.layout.seting_profile_tab_layout, container, false)).getContent();
+                    if (Services.dataManager.getUserData().getInformationFromUser().getId() != null)
+                        rootView = (controllerProfileSetting =
+                                new ControllerProfileSetting(compatActivity,
+                                        (ViewGroup) inflater.inflate(R.layout.seting_profile_tab_layout,
+                                                container, false))).getContent();
+                    else
+                        rootView = inflater.inflate(R.layout.offer_to_log, container, false);
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.seting_app_tab_layout, container, false);

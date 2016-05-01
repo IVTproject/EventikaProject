@@ -24,9 +24,12 @@ public class DialogSelector extends BasicDialog {
     }
 
     public void setSelectedItems(String[] selectedItems) {
-        this.selectedItems = new TreeSet<>();
-        for (String item : selectedItems)
-            this.selectedItems.add(item);
+        if (this.selectedItems == null)
+            this.selectedItems = new TreeSet<>();
+        this.selectedItems.clear();
+        if (selectedItems != null)
+            for (String item : selectedItems)
+                this.selectedItems.add(item);
     }
 
     public void setTitle(String title) {
@@ -65,8 +68,13 @@ public class DialogSelector extends BasicDialog {
         if (listView == null)
             return new boolean[0];
         SparseBooleanArray chosen = listView.getCheckedItemPositions();
-        boolean[] conditions = new boolean[chosen.size()];
-        for (int i = 0; i < chosen.size(); i++)
+
+        boolean[] conditions;
+        if (listItems != null)
+            conditions = new boolean[listItems.length];
+        else
+            conditions = new boolean[0];
+        for (int i = 0; i < conditions.length; i++)
             conditions[i] = chosen.get(i);
         return conditions;
     }
