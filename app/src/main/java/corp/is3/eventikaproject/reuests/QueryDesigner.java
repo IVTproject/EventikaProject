@@ -7,9 +7,10 @@ import java.util.Set;
 
 public class QueryDesigner {
 
-    public static enum QUERY_TYPE {LIST_EVENT, EVENT_INFO, FAVORITE_EVENT, ADD_NEW_USER};
+    public static enum QUERY_TYPE {LIST_EVENT, EVENT_INFO, FAVORITE_EVENT, ADD_NEW_USER, AUTH_USER};
 
     private final String DOMAIN_API = "http://eventikas.esy.es/index.php/api/";
+    private final String GLOBAL_TOKEN = "ilnur";
 
     private QUERY_TYPE type;
     private Map conditions;
@@ -48,19 +49,26 @@ public class QueryDesigner {
 
         switch (type) {
             case LIST_EVENT:
-                reuest.append("getEvents").append(limit());
+                reuest.append("getEvents").append(limit()).append(globToken());
                 break;
             case EVENT_INFO:
                 break;
             case FAVORITE_EVENT:
                 break;
             case ADD_NEW_USER:
-                reuest.append("addNewUser").append(conditions());
+                reuest.append("addNewUser").append(conditions()).append(globToken());
+                break;
+            case AUTH_USER:
+                reuest.append("authUser").append(conditions()).append(globToken());
                 break;
             default:
                 throw new NullPointerException();
         }
         return reuest.toString();
+    }
+
+    private String globToken() {
+        return new StringBuilder("/globToken/").append(GLOBAL_TOKEN).toString();
     }
 
     private String limit() {

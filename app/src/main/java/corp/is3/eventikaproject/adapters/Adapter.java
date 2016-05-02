@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 public abstract class Adapter {
 
-    public static final int NOT_ACTION = 0;
-    public static final int PARSE_ERROR = 1;
+    public static final int NOT_ACTION = 1;
+    public static final int PARSE_ERROR = 2;
 
+    public static final int ACCESS_ERROR = 0;
     public static final int CODE_OK = 200;
     public static final int CODE_ERROR = 500;
     public static final int CODE_NOT_FOUND = 404;

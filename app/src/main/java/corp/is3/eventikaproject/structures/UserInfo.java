@@ -4,26 +4,29 @@ import android.graphics.drawable.Drawable;
 
 import java.util.Arrays;
 
+import corp.is3.eventikaproject.services.Services;
+
 public class UserInfo {
 
-    public final int VK = 1;
-    public final int FACE_BOOK = 2;
+    public static final int VK = 1;
+    public static final int FACE_BOOK = 2;
 
+    private final String KEY_AVATAR_STORE = "user_avatar";
     private final int COUNT_SOCIAL_NETWORK = 2;
 
     private Long id;
-    private Integer keyAPI;
-    private String login;
-    private String fistName;
-    private String lastName;
+    private String keyAPI;
+    private String email = "";
+    private String numberPhone = "";
+    private String fistName = "";
+    private String lastName = "";
     private String[] interest;
     private String[] citys;
     private String[] socialNetwork;
-    private Drawable avatar;
 
 
     public UserInfo() {
-        socialNetwork = new String[50];
+        socialNetwork = new String[COUNT_SOCIAL_NETWORK + 1];
     }
 
     public Long getId() {
@@ -34,20 +37,20 @@ public class UserInfo {
         this.id = id;
     }
 
-    public Integer getKeyAPI() {
+    public String getKeyAPI() {
         return keyAPI;
     }
 
-    public void setKeyAPI(Integer keyAPI) {
+    public void setKeyAPI(String keyAPI) {
         this.keyAPI = keyAPI;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFistName() {
@@ -89,16 +92,17 @@ public class UserInfo {
     }
 
     public Drawable getAvatar() {
-        return avatar;
+        return Services.dataManager.getDrawableData().getDrawable(KEY_AVATAR_STORE);
     }
 
     public void setAvatar(Drawable avatar) {
-        this.avatar = avatar;
+        Services.dataManager.getDrawableData().addDrawable(KEY_AVATAR_STORE, avatar, true);
     }
 
     public String getSocialNetwork(int socialNetworkType) {
         if (socialNetworkType > 0 && socialNetworkType <= COUNT_SOCIAL_NETWORK) {
-            return socialNetwork[socialNetworkType];
+            String val = socialNetwork[socialNetworkType];
+            return  val == null ? "" : val;
         }
         return null;
     }
@@ -109,5 +113,13 @@ public class UserInfo {
             return true;
         }
         return false;
+    }
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
     }
 }

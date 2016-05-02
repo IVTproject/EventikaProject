@@ -2,10 +2,11 @@ package corp.is3.eventikaproject.structures;
 
 import android.graphics.drawable.Drawable;
 
+import corp.is3.eventikaproject.services.Services;
+
 /* Информация о одном мероприятии*/
 public class EventInfo {
 
-    private Drawable image;
     private String urlImage;
     private String name;
     private String beginDate;
@@ -23,11 +24,11 @@ public class EventInfo {
     private int idOrganizer;
 
     public Drawable getImage() {
-        return image;
+        return Services.dataManager.getDrawableData().getDrawable(urlImage);
     }
 
     public void setImage(Drawable image) {
-        this.image = image;
+        Services.dataManager.getDrawableData().addDrawable(urlImage, image, false);
     }
 
     public String getUrlImage() {

@@ -150,6 +150,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void authorization(Map<String, String> mapParam) {
         showProgress(true);
+        QueryDesigner queryDesigner = new QueryDesigner();
+        queryDesigner.setType(QueryDesigner.QUERY_TYPE.AUTH_USER);
+        queryDesigner.setConditions(mapParam);
+        new QueryManager().query(queryDesigner, new CallbackFunction() {
+            @Override
+            public void callable(String response) {
+                AdapterLoginUser al = new AdapterLoginUser(response, LoginActivity.this);
+                if (al.getResultCode() == Adapter.CODE_OK) {
+                    Long id = (Long)al.getResult().get(0);
+                    if (id != null) {
+                        Services.dataManager.getUserData().getInformationFromUser().setId(id);
+                        finish();
+                    }
+                }
+                showProgress(false);
+            }
+        });
     }
 
     private boolean isEmailValid(String email) {

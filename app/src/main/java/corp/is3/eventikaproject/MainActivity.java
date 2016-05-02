@@ -2,28 +2,19 @@ package corp.is3.eventikaproject;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import java.io.IOException;
-
 import corp.is3.eventikaproject.contentmanager.ContentManager;
-import corp.is3.eventikaproject.controllers.ControllerEventBoard;
 import corp.is3.eventikaproject.controllers.ControllerNavigationView;
 import corp.is3.eventikaproject.datamanager.DataManager;
 import corp.is3.eventikaproject.services.Services;
@@ -60,21 +51,26 @@ public class MainActivity extends AppCompatActivity {
 
         ContentManager contentManager = new ContentManager(this, mainContent);
 
+
         Services.controllerNavigationView = controllerNavigationView;
         Services.contentManager = contentManager;
         Services.dataManager = new DataManager(this);
+        Services.dataManager = new DataManager(this);
+        long l = System.currentTimeMillis();
         Services.dataManager.load();
+        l = System.currentTimeMillis() - l;
+        Services.controllerNavigationView.setProfileName(new String[]{l + ""});
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Services.dataManager.save();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Services.dataManager.save();
     }
 
     @Override
@@ -91,17 +87,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        Bitmap bitmap = null;
-
         switch (requestCode) {
             case CHANGE_AVATAR:
                 if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
                 }
         }
     }

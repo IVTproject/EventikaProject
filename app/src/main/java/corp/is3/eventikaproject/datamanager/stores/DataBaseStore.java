@@ -80,6 +80,11 @@ public class DataBaseStore<T> implements Store<T> {
         return value;
     }
 
+    @Override
+    public boolean remove(String key) {
+        return DB.getReadableDatabase().delete(TABLE_NAME, "key = ?", new String[]{key}) != -1;
+    }
+
     private void removeOld() {
         new Thread(new Runnable() {
             @Override

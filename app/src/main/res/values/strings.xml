@@ -68,4 +68,6 @@
     <string name="error_password">Слишком короткий пароль</string>
     <string name="error_confirm_password">Пароли не совпадают</string>
 
+    <string name="write_to_field">Заполните поле</string>
+
 </resources>

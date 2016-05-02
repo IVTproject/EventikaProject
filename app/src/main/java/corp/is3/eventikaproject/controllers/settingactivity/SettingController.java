@@ -4,5 +4,5 @@ public interface SettingController {
 
     public void loadSetting();
 
-    public void saveSetting();
+    public boolean saveSetting();
 }

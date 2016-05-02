@@ -1,6 +1,10 @@
 package corp.is3.eventikaproject;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,11 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import java.io.IOException;
 
 import corp.is3.eventikaproject.controllers.settingactivity.ControllerProfileSetting;
 import corp.is3.eventikaproject.services.Services;
 
 public class SettingActivity extends AppCompatActivity {
+
+    public static final int SELECT_PHOTO = 1;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -33,13 +42,6 @@ public class SettingActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_chevron_left_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -48,6 +50,25 @@ public class SettingActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = intent.getData();
+                    try {
+                        controllerProfileSetting.
+                                setAvatar(MediaStore.Images.Media.getBitmap(getContentResolver(),
+                                        selectedImage));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+        }
     }
 
     public void authorization(View v) {
@@ -64,10 +85,10 @@ public class SettingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_setting:
-                finish();
-                if (controllerProfileSetting != null) {
-                    controllerProfileSetting.saveSetting();
+                if (controllerProfileSetting != null &&
+                        controllerProfileSetting.saveSetting()) {
                     controllerProfileSetting = null;
+                    finish();
                 }
                 break;
         }

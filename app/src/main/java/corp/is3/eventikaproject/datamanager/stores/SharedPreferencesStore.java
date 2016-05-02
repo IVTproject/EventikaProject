@@ -2,6 +2,8 @@ package corp.is3.eventikaproject.datamanager.stores;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,6 +27,9 @@ public class SharedPreferencesStore<T> implements Store<T> {
 
     @Override
     public boolean setData(String key, T data) {
+        Drawable a;
+        Bitmap b;
+        
         try {
             if(mSettings.contains(key))
                 mSettings.edit().remove(key);
@@ -43,6 +48,16 @@ public class SharedPreferencesStore<T> implements Store<T> {
             return null;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Override
+    public boolean remove(String key) {
+        if(mSettings.contains(key)) {
+            mSettings.edit().remove(key);
+            return true;
+        } else {
+            return false;
         }
     }
 
