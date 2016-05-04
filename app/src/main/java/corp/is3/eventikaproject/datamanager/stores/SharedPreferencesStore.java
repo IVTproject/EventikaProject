@@ -10,9 +10,8 @@ import com.google.gson.GsonBuilder;
 
 import corp.is3.eventikaproject.R;
 
-/**
- * Created by Дмитрий on 01.05.2016.
- */
+
+/* Хранилище. Пишет в файл кэша. Лучше не использовать, работает медленее DataBaseStore.*/
 public class SharedPreferencesStore<T> implements Store<T> {
 
     private final String NAME_FILE;

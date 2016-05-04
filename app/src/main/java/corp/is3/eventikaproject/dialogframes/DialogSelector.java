@@ -11,6 +11,8 @@ import android.widget.ListView;
 import java.util.Set;
 import java.util.TreeSet;
 
+/*Диалоговое окно выбора элементов. Переделать!*/
+@Deprecated
 public class DialogSelector extends BasicDialog {
 
     private ListView listView;
@@ -47,7 +49,7 @@ public class DialogSelector extends BasicDialog {
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         if (selectedItems != null)
-            for (int i = 0, j = 0; i < listItems.length; i++)
+            for (int i = 0; i < listItems.length; i++)
                 if (selectedItems.contains(listItems[i]))
                     listView.getCheckedItemPositions().append(i, true);
 

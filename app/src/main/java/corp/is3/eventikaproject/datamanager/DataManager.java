@@ -8,6 +8,7 @@ import corp.is3.eventikaproject.datamanager.stores.DataBaseStore;
 import corp.is3.eventikaproject.datamanager.stores.FilesImageStore;
 import corp.is3.eventikaproject.structures.UserInfo;
 
+/* Класс отвечающий за хранение, запись и загрузку информации*/
 public class DataManager implements BasicData {
 
     private ArrayList<BasicData> dataObjects;

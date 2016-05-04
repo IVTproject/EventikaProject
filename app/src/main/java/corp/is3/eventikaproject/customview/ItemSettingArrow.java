@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import corp.is3.eventikaproject.R;
 
+/* Пункт меню с иконкой справа. Позже надо объеденить с классом ItemMenuCustom*/
+@Deprecated
 public class ItemSettingArrow extends RelativeLayout {
 
     private TextView title;

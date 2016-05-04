@@ -1,19 +1,15 @@
 package corp.is3.eventikaproject.listeners;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
 
 import corp.is3.eventikaproject.structures.EventInfo;
 
-/**
- * Created by Дмитрий on 28.04.2016.
- */
+/*Сохраняет картинку псле загрузки, нужно переименовать, и переписать немного, после того когда допишется класс DrawableData*/
+@Deprecated
 public class ImageLoadingListener implements com.nostra13.universalimageloader.core.listener.ImageLoadingListener {
 
     private EventInfo eventInfo;

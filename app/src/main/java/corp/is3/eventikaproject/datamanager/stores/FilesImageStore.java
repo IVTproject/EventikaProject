@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import corp.is3.eventikaproject.R;
 
+/* Хранилище картинок*/
 public class FilesImageStore implements Store<Drawable> {
 
     private final String FILE_EXTENSION;
@@ -18,8 +19,8 @@ public class FilesImageStore implements Store<Drawable> {
     private String dir;
 
     public FilesImageStore(Context context) {
-        FILE_EXTENSION = context.getResources().getString(R.string.app_name);
-        dir = context.getCacheDir().getAbsolutePath();
+        FILE_EXTENSION = context.getResources().getString(R.string.app_name) + ".obb";
+        dir = context.getObbDir().getAbsolutePath();
     }
 
     @Override

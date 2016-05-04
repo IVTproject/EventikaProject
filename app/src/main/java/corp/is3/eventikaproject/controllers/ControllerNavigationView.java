@@ -15,6 +15,7 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 
 import corp.is3.eventikaproject.R;
 import corp.is3.eventikaproject.customview.LastEventVIew;
+import corp.is3.eventikaproject.datamanager.UserData;
 import corp.is3.eventikaproject.listeners.OnTouchClickListenerBase;
 import corp.is3.eventikaproject.services.Services;
 import corp.is3.eventikaproject.structures.EventInfo;
@@ -94,7 +95,11 @@ public class ControllerNavigationView extends BasicController {
 
     @Override
     public void refresh() {
-
+        UserData ud = Services.dataManager.getUserData();
+        ud.loadAvatarImageView(avatar);
+        String[] profileName = new String[]{ud.getInformationFromUser().getLastName(),
+                ud.getInformationFromUser().getFistName()};
+        setProfileName(profileName);
     }
 
     public boolean setAvatar(Drawable image) {
@@ -118,6 +123,8 @@ public class ControllerNavigationView extends BasicController {
         return false;
     }
 
+    /* Создает все нужные слушатели. Позже нужно изменить*/
+    @Deprecated
     private void initListeners() {
         for (int id : LIST_ITEM_MENU)
             getContent().findViewById(id).setOnTouchListener(new OnTouchClickListenerBase() {
@@ -191,12 +198,5 @@ public class ControllerNavigationView extends BasicController {
                 break;
         }
 
-    }
-
-    /* Удалить, создано для теста*/
-    @Deprecated
-    private void setDefaultValue() {
-        //setAvatar(res.getDrawable(R.drawable.avatar));
-        //setProfileName(new String[]{"Исхаков", "Ильнур"});
     }
 }

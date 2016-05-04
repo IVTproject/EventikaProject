@@ -1,7 +1,6 @@
 package corp.is3.eventikaproject;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,13 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.io.IOException;
 
 import corp.is3.eventikaproject.controllers.settingactivity.ControllerProfileSetting;
 import corp.is3.eventikaproject.services.Services;
 
+/*Активити настроек*/
 public class SettingActivity extends AppCompatActivity {
 
     public static final int SELECT_PHOTO = 1;
@@ -34,6 +33,8 @@ public class SettingActivity extends AppCompatActivity {
     private static AppCompatActivity compatActivity;
     private static ControllerProfileSetting controllerProfileSetting;
 
+    private boolean recreateActivity = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         compatActivity = this;
@@ -43,6 +44,12 @@ public class SettingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -53,9 +60,18 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (recreateActivity) {
+            recreateActivity = false;
+            recreate();
+        }
+    }
+
+    /*Результат выбора аватара*/
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
         switch (requestCode) {
             case SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
@@ -71,7 +87,9 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    /*Октрывает активити(окно) с регситрацией*/
     public void authorization(View v) {
+        recreateActivity = true;
         Services.contentManager.openAuthorization();
     }
 
@@ -95,6 +113,7 @@ public class SettingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*Инициализация экранов настроек и их контролеров*/
     protected static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -134,6 +153,7 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    /*Создание экранов настроек*/
     protected class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {

@@ -7,21 +7,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/* Клас преобразовывающей данные из json в нужные объекты. Необхожимо определить один метод(convert)*/
 public abstract class Adapter {
 
+    /* Коды состояний адаптера*/
     public static final int NOT_ACTION = 1;
     public static final int PARSE_ERROR = 2;
-
     public static final int ACCESS_ERROR = 0;
     public static final int CODE_OK = 200;
     public static final int CODE_ERROR = 500;
     public static final int CODE_NOT_FOUND = 404;
-    public static final int CODE_NOT_REG = 101;
-    public static final int CODE_NOT_AUTH = 102;
 
     private String jsonText;
     private ArrayList result;
     private Context context;
+
+    private String dataTag = "data";
 
     protected int resultCode = NOT_ACTION;
 
@@ -30,7 +31,7 @@ public abstract class Adapter {
     }
 
     public Adapter(Object jsonText, Context context) {
-        if(jsonText != null)
+        if (jsonText != null)
             this.jsonText = jsonText.toString();
         this.context = context;
         result = getResult();
@@ -61,16 +62,30 @@ public abstract class Adapter {
         return jsonText;
     }
 
+    protected void setDataTag(String dataTag) {
+        this.dataTag = dataTag;
+    }
+
     protected abstract ArrayList convert(JSONObject data);
 
     private JSONObject getData(String jsonText) {
+        JSONObject jsonObject = null;
+        JSONObject data = null;
         try {
-            JSONObject jsonObject = new JSONObject(jsonText);
-            JSONObject data = jsonObject.getJSONObject("data");
-            resultCode = jsonObject.getInt("code");
-            return data;
+            jsonObject = new JSONObject(jsonText);
+            if(dataTag != null)
+                data = jsonObject.getJSONObject(dataTag);
+            else
+                data = jsonObject;
         } catch (JSONException e) {
-            return new JSONObject();
+            data = new JSONObject();
         }
+        try {
+            if(jsonObject != null)
+                resultCode = jsonObject.getInt("code");
+        } catch (JSONException e) {
+            resultCode = NOT_ACTION;
+        }
+        return data;
     }
 }

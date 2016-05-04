@@ -22,9 +22,11 @@ public class EventInfo {
     private float latitude;
     private int id;
     private int idOrganizer;
+    private boolean isFavorite = false;
 
     public Drawable getImage() {
         return Services.dataManager.getDrawableData().getDrawable(urlImage);
+        //return null;
     }
 
     public void setImage(Drawable image) {
@@ -149,5 +151,13 @@ public class EventInfo {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(boolean isFavorite) {
+        this.isFavorite = isFavorite;
     }
 }

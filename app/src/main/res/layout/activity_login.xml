@@ -96,6 +96,12 @@
                 android:onClick="checkBox"
                 android:text="@string/registration"/>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="vk"
+                android:onClick="authVKClick"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

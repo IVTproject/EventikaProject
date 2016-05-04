@@ -1,10 +1,10 @@
 package corp.is3.eventikaproject.controllers;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 
+/* Родительский класс для всех созданных контроллеров*/
 public abstract class BasicController {
 
     protected Resources res;

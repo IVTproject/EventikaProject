@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import corp.is3.eventikaproject.R;
 import corp.is3.eventikaproject.structures.EventInfo;
 
+/* Преобразует json в коллекцию объектов EventInfo, если не получается выставляет состояние Parser error*/
 public class AdapterEventInfo extends Adapter {
 
     public AdapterEventInfo(Context context) {
@@ -32,6 +33,7 @@ public class AdapterEventInfo extends Adapter {
             }
             return eventsInfo;
         } catch (JSONException e) {
+            resultCode = PARSE_ERROR;
             return null;
         }
     }

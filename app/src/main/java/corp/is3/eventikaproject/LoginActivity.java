@@ -2,30 +2,53 @@ package corp.is3.eventikaproject;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import corp.is3.eventikaproject.adapters.Adapter;
 import corp.is3.eventikaproject.adapters.AdapterLoginUser;
+import corp.is3.eventikaproject.adapters.AdapterVkLogin;
+import corp.is3.eventikaproject.adapters.converters.EventInfoToMap;
 import corp.is3.eventikaproject.reuests.CallbackFunction;
 import corp.is3.eventikaproject.reuests.QueryDesigner;
 import corp.is3.eventikaproject.reuests.QueryManager;
 import corp.is3.eventikaproject.services.Services;
+import corp.is3.eventikaproject.structures.UserInfo;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private enum SOCIAL_NETWORK {VK}
+
+    ;
+
+    private final String[] sMyScope = new String[]{
+            VKScope.WALL,
+            VKScope.PHOTOS,
+            VKScope.NOHTTPS
+    };
+
+    private SOCIAL_NETWORK authSosialNetworkId = SOCIAL_NETWORK.VK;
 
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -33,27 +56,18 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        setupActionBar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mConfirmPassword = (EditText) findViewById(R.id.confirm_password);
-
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
@@ -77,11 +91,52 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setElevation(0);
+    public void authVKClick(View v) {
+        VKSdk.wakeUpSession(this);
+        if (!VKSdk.isLoggedIn()) {
+            authSosialNetworkId = SOCIAL_NETWORK.VK;
+            VKSdk.login(this, sMyScope);
+        } else {
+            authVK();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (authSosialNetworkId) {
+            case VK:
+                authVK();
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void authVK() {
+        showProgress(true);
+        VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS,
+                "id,first_name,last_name,sex,bdate,city,country,photo_400_orig," +
+                        "domain,has_mobile,contacts,connections,site," +
+                        "universities,status"));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                ArrayList<UserInfo> info = new AdapterVkLogin(response.json, LoginActivity.this).getResult();
+                if (info != null && info.size() > 0) {
+                    Services.dataManager.getUserData().setUserInfo(info.get(0));
+                    EventInfoToMap converter = new EventInfoToMap();
+                    converter.setUseSocialNetwork(UserInfo.VK);
+                    requestId(QueryDesigner.QUERY_TYPE.AUTH_SOCIAL_NETWORK,
+                            converter.convert(Services.dataManager.getUserData().getInformationFromUser()));
+                }
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                showProgress(true);
+            }
+        });
     }
 
     private void attemptLogin() {
@@ -89,14 +144,11 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView.setError(null);
         mPasswordView.setError(null);
         mConfirmPassword.setError(null);
-
         boolean isRegistration = mConfirmPassword.getVisibility() == View.VISIBLE;
         boolean notError = true;
-
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         String confirmPassword = mConfirmPassword.getText().toString();
-
         if (TextUtils.isEmpty(password) || password.length() < 4) {
             mPasswordView.setError(getResources().getString(R.string.error_password));
             notError = false;
@@ -115,52 +167,35 @@ public class LoginActivity extends AppCompatActivity {
             notError = false;
         }
 
-        Map<String, String> mapParam = new HashMap<>();
-        mapParam.put("eMail", email);
-        mapParam.put("password", password);
         if (notError) {
+            Map<String, String> mapParam = new HashMap<>();
+            mapParam.put("eMail", email);
+            mapParam.put("password", password);
             if (isRegistration)
-                registration(mapParam);
+                requestId(QueryDesigner.QUERY_TYPE.ADD_NEW_USER, mapParam);
             else
-                authorization(mapParam);
-
+                requestId(QueryDesigner.QUERY_TYPE.AUTH_USER, mapParam);
         }
     }
 
-    private void registration(Map<String, String> mapParam) {
+    private void requestId(final QueryDesigner.QUERY_TYPE type, final Map<String, String> mapParam) {
         showProgress(true);
         QueryDesigner queryDesigner = new QueryDesigner();
-        queryDesigner.setType(QueryDesigner.QUERY_TYPE.ADD_NEW_USER);
+        queryDesigner.setType(type);
         queryDesigner.setConditions(mapParam);
         new QueryManager().query(queryDesigner, new CallbackFunction() {
             @Override
             public void callable(String response) {
                 AdapterLoginUser al = new AdapterLoginUser(response, LoginActivity.this);
+                al.getResult();
                 if (al.getResultCode() == Adapter.CODE_OK) {
-                    Long id = (Long)al.getResult().get(0);
+                    Long id = (Long) al.getResult().get(0);
+                    String token = (String) al.getResult().get(1);
                     if (id != null) {
-                        Services.dataManager.getUserData().getInformationFromUser().setId(id);
-                        finish();
-                    }
-                }
-                showProgress(false);
-            }
-        });
-    }
 
-    private void authorization(Map<String, String> mapParam) {
-        showProgress(true);
-        QueryDesigner queryDesigner = new QueryDesigner();
-        queryDesigner.setType(QueryDesigner.QUERY_TYPE.AUTH_USER);
-        queryDesigner.setConditions(mapParam);
-        new QueryManager().query(queryDesigner, new CallbackFunction() {
-            @Override
-            public void callable(String response) {
-                AdapterLoginUser al = new AdapterLoginUser(response, LoginActivity.this);
-                if (al.getResultCode() == Adapter.CODE_OK) {
-                    Long id = (Long)al.getResult().get(0);
-                    if (id != null) {
                         Services.dataManager.getUserData().getInformationFromUser().setId(id);
+                        Services.dataManager.getUserData().getInformationFromUser().setKeyAPI(token);
+                        Services.dataManager.getUserData().getInformationFromUser().setEmail(mapParam.get("eMail"));
                         finish();
                     }
                 }
@@ -171,10 +206,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isEmailValid(String email) {
         return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
     }
 
     private void showProgress(final boolean show) {

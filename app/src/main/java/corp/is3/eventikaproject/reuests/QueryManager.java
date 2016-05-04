@@ -8,24 +8,29 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/* Класс производящий запрос к серверу*/
 public class QueryManager {
 
     public QueryManager() {
 
     }
 
+    @Deprecated
     public void query(final String url, final CallbackFunction callbackFunction) {
-        final Handler h = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                queryToServer(url, callbackFunction, h);
-            }
-        }).start();
+        query(url, callbackFunction, new Handler());
     }
 
     public void query(QueryDesigner queryDesigner, CallbackFunction callbackFunction) {
-        query(queryDesigner.getURL(), callbackFunction);
+        query(queryDesigner.getURL(), callbackFunction, new Handler());
+    }
+
+    private void query(final String url, final CallbackFunction callbackFunction, final Handler handler) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                queryToServer(url, callbackFunction, handler);
+            }
+        }).start();
     }
 
     private void queryToServer(final String url, final CallbackFunction callbackFunction, final Handler h) {

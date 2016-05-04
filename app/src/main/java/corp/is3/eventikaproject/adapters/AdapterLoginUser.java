@@ -7,10 +7,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Дмитрий on 01.05.2016.
- */
+/* Берет из ответа id пользователя если он там есть, иначе выставляет состояние Parse error*/
 public class AdapterLoginUser extends Adapter {
+
+    public static final int CODE_NOT_REG = 101;
+    public static final int CODE_NOT_AUTH = 102;
 
     public AdapterLoginUser(Context context) {
         super(context);
@@ -22,9 +23,11 @@ public class AdapterLoginUser extends Adapter {
 
     @Override
     protected ArrayList convert(JSONObject data) {
-        ArrayList<Long> idUser = new ArrayList<>();
+        ArrayList<Object> idUser = new ArrayList<>();
         try {
-            idUser.add((long)data.getInt("id_user"));
+            JSONObject profile = data.getJSONObject("profile");
+            idUser.add(profile.getLong("id_user"));
+            idUser.add(profile.getString("token"));
         } catch (JSONException e) {
             resultCode = PARSE_ERROR;
         }

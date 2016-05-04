@@ -1,6 +1,14 @@
 package corp.is3.eventikaproject.structures;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.Arrays;
 
@@ -74,7 +82,7 @@ public class UserInfo {
     }
 
     public void setInterest(String[] interest) {
-        if(interest != null)
+        if (interest != null)
             this.interest = Arrays.copyOf(interest, interest.length);
         else
             this.interest = null;
@@ -85,7 +93,7 @@ public class UserInfo {
     }
 
     public void setCitys(String[] citys) {
-        if(citys != null)
+        if (citys != null)
             this.citys = Arrays.copyOf(citys, citys.length);
         else
             this.citys = null;
@@ -102,7 +110,7 @@ public class UserInfo {
     public String getSocialNetwork(int socialNetworkType) {
         if (socialNetworkType > 0 && socialNetworkType <= COUNT_SOCIAL_NETWORK) {
             String val = socialNetwork[socialNetworkType];
-            return  val == null ? "" : val;
+            return val == null ? "" : val;
         }
         return null;
     }

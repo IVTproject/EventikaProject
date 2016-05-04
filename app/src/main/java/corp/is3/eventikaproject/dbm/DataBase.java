@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import corp.is3.eventikaproject.R;
 
+/*База даннх. При любом изменение структуры таблиц, прибалять к версии +1!!!*/
 public class DataBase extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 1;

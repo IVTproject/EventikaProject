@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import corp.is3.eventikaproject.R;
 import corp.is3.eventikaproject.SettingActivity;
 import corp.is3.eventikaproject.controllers.BasicController;
+import corp.is3.eventikaproject.datamanager.LoadableData;
 import corp.is3.eventikaproject.dialogframes.DialogSelector;
 import corp.is3.eventikaproject.dialogframes.SelectItemsListener;
 import corp.is3.eventikaproject.listeners.OnTouchClickListenerBase;
@@ -26,7 +26,9 @@ import corp.is3.eventikaproject.structures.UserInfo;
 
 public class ControllerProfileSetting extends BasicController implements SettingController {
 
+    /* id полей и объектов находящихся в xml врестке странице*/
     private final int FIELD_INTEREST = R.id.select_field_interest;
+    private final int CITYS = R.id.select_citys;
     private final int AVATAR = R.id.avatar_setting;
     private final int LAST_NAME = R.id.last_name;
     private final int FIRST_NAME = R.id.first_name;
@@ -35,10 +37,11 @@ public class ControllerProfileSetting extends BasicController implements Setting
     private final int EMAIL = R.id.email_setting_layout;
     private final int NUMBER_PHONE = R.id.number_phone;
 
-    private final int CITYS = R.id.select_citys;
-
+    /* Список объектов по нажатию на которые
+    нужно открыть диалоговое окно с выбром неких данных*/
     private ArrayList<View> selectors;
 
+    /* Поля находящиеся в xml верстке, находятся по id-кам расположеным выше*/
     private CircularImageView avatarImageView;
     private EditText lastName;
     private EditText firstName;
@@ -49,11 +52,14 @@ public class ControllerProfileSetting extends BasicController implements Setting
 
     private Resources r;
 
+    /*Списки дынных которые нужно вывести в диалоговых окнах выбора*/
     private String[] listInterest;
     private String[] listCity;
+    /*Пункты необходимые пометить как выбраные*/
     private String[] selectedInterest;
     private String[] selectedCity;
 
+    /*Переменая говорящая о том была ли изменена аватарка*/
     private boolean changeAvatar = false;
 
     public ControllerProfileSetting(AppCompatActivity compatActivity, ViewGroup content) {
@@ -66,16 +72,17 @@ public class ControllerProfileSetting extends BasicController implements Setting
         avatarOnClick();
     }
 
-    @Deprecated
     public void setAvatar(Bitmap avatar) {
+        if (avatar == null)
+            return;
         float width = avatar.getWidth();
         float height = avatar.getHeight();
         if (width < height)
             avatar = Bitmap.createScaledBitmap(avatar, 200, (int) (height / width * 200f), false);
         else
             avatar = Bitmap.createScaledBitmap(avatar, (int) (width / height * 200f), 200, false);
-        Drawable avaDrawable = new BitmapDrawable(avatar);
-        this.avatarImageView.setImageDrawable(avaDrawable);
+        this.avatarImageView.setImageBitmap(avatar);
+
         changeAvatar = true;
     }
 
@@ -87,13 +94,12 @@ public class ControllerProfileSetting extends BasicController implements Setting
     @Override
     public void loadSetting() {
         UserInfo info = Services.dataManager.getUserData().getInformationFromUser();
-        listInterest = Services.dataManager.getLoadableData().getListInterests();
-        listCity = Services.dataManager.getLoadableData().getListCity();
+        LoadableData ld = Services.dataManager.getLoadableData();
+        listInterest = ld.getListInterests();
+        listCity = ld.getListCity();
         selectedInterest = info.getInterest();
         selectedCity = info.getCitys();
-        Drawable avatar = info.getAvatar();
-        if (avatar != null)
-            this.avatarImageView.setImageDrawable(avatar);
+        Services.dataManager.getUserData().loadAvatarImageView(avatarImageView);
         lastName.setText(info.getLastName());
         firstName.setText(info.getFistName());
         vkProfile.setText(info.getSocialNetwork(UserInfo.VK));
@@ -111,14 +117,15 @@ public class ControllerProfileSetting extends BasicController implements Setting
         if (changeAvatar)
             info.setAvatar(avatarImageView.getDrawable());
         Resources r = getAppCompatActivity().getResources();
+        String writeField = r.getString(R.string.write_to_field);
         if (lastName.getText().toString().length() == 0) {
-            lastName.setError(r.getString(R.string.write_to_field));
+            lastName.setError(writeField);
             isExit = false;
         } else {
             info.setLastName(lastName.getText().toString());
         }
         if (firstName.getText().toString().length() == 0) {
-            firstName.setError(r.getString(R.string.write_to_field));
+            firstName.setError(writeField);
             isExit = false;
         } else {
             info.setFistName(firstName.getText().toString());
@@ -153,6 +160,8 @@ public class ControllerProfileSetting extends BasicController implements Setting
         avatarImageView = (CircularImageView) getContent().findViewById(AVATAR);
     }
 
+    /*В методе происходит инициализация всех необходимых слушателей. Поже будет переписан*/
+    @Deprecated
     private void initListener() {
         for (View v : selectors)
             v.setOnTouchListener(new OnTouchClickListenerBase() {
@@ -174,6 +183,8 @@ public class ControllerProfileSetting extends BasicController implements Setting
             });
     }
 
+    /* Вызывается при нажатии на кнопку открытия диалогового окна.
+     id - на какой именно элемент нажали*/
     private void actionSelector(int id) {
         switch (id) {
             case FIELD_INTEREST:
@@ -185,6 +196,8 @@ public class ControllerProfileSetting extends BasicController implements Setting
         }
     }
 
+    /* Показывает диалоговое окно. title - заголовок, items - список значений,
+    selectedItems - элементы которые должны быть помеченые как выбранные, listener - слушатель выбора элементов*/
     private void showDialogSelector(String title, String[] items, String[] selectedItems, SelectItemsListener listener) {
         DialogSelector dialog = new DialogSelector();
         dialog.setListItems(items);
@@ -236,6 +249,7 @@ public class ControllerProfileSetting extends BasicController implements Setting
         };
     }
 
+    /* Создание массива выбранных элементов на основе массива флагов - mask, пришедшим в слушателе при закрытии диалогового окна*/
     private String[] createSelectedArray(String[] fullArray, boolean[] mask) {
         int countSelect = 0;
         for (boolean res : mask)

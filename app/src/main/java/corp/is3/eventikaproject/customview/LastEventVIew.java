@@ -12,7 +12,7 @@ import android.widget.TextView;
 import corp.is3.eventikaproject.R;
 import corp.is3.eventikaproject.structures.EventInfo;
 
-/* Элементы в боковом меню в разделе "Последние"*/
+/* Элементы в боковом меню в разделе "Последние", нуждается в доработке*/
 public class LastEventVIew extends RelativeLayout {
 
     private View shadow;

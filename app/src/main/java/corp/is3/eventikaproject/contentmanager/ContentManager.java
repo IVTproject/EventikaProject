@@ -46,30 +46,27 @@ public class ContentManager {
         if (controllerEventBoard == null) {
             controllerEventBoard = new ControllerEventBoard(COMPAT_ACTIVITY,
                     (ViewGroup) LinearLayout.inflate(COMPAT_ACTIVITY, R.layout.event_board, null));
+            controllerEventBoard.init();
         }
         showScreen(controllerEventBoard.getContent());
     }
 
     /* Показать доску избранных мероприятий*/
     public void showFavoriteEvent() {
-        final TextView text = new TextView(COMPAT_ACTIVITY);
-        QueryDesigner qd = new QueryDesigner();
-        qd.setType(QueryDesigner.QUERY_TYPE.FAVORITE_EVENT);
-        new QueryManager().query(qd.toString(), new CallbackFunction() {
-
-            @Override
-            public void callable(String response) {
-                text.setText(response);
-                ContentManager.this.container.addView(text);
-            }
-        });
+        ControllerEventBoard favoriteBoard = new ControllerEventBoard(COMPAT_ACTIVITY,
+                (ViewGroup) LinearLayout.inflate(COMPAT_ACTIVITY, R.layout.event_board, null));
+        favoriteBoard.setTypeBoard(ControllerEventBoard.TYPE_BOARD.FAVORITE);
+        favoriteBoard.init();
+        showScreen(favoriteBoard.getContent());
     }
 
+    /* Открывает активити с настройками(SettingActivity)*/
     public void openSettingProfile() {
         Intent intent = new Intent(COMPAT_ACTIVITY, SettingActivity.class);
         COMPAT_ACTIVITY.startActivity(intent);
     }
 
+    /* Открывает активити с регистрацией(авторизацией), метод вызывается из SettingActivity*/
     public void openAuthorization() {
         Intent intent = new Intent(COMPAT_ACTIVITY, LoginActivity.class);
         COMPAT_ACTIVITY.startActivity(intent);

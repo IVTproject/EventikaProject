@@ -1,8 +1,6 @@
 package corp.is3.eventikaproject.dialogframes;
 
-/**
- * Created by Дмитрий on 30.04.2016.
- */
+/*Реализация данного интерфейса передается в диалоговые окна выбора для обработки результата*/
 public interface SelectItemsListener {
 
     public void ok(boolean[] condition);

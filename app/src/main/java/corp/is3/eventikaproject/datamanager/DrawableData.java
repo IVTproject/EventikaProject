@@ -1,8 +1,6 @@
 package corp.is3.eventikaproject.datamanager;
 
-import android.app.DownloadManager;
 import android.graphics.drawable.Drawable;
-import android.os.DropBoxManager;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,9 +9,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import corp.is3.eventikaproject.datamanager.connvert.DrawableByte;
 import corp.is3.eventikaproject.datamanager.stores.Store;
 
+/* Хранилище графической информации. Картинок проще говоря :)*/
 public class DrawableData implements BasicData {
 
     private final static String KEY = "DRAWABLE_DATA";
